@@ -1,0 +1,674 @@
+/* =========================================
+   ADD BOOK FORM — redesigned to match
+   the edit-modal design system exactly
+========================================= */
+
+/* ── Card shell ── */
+.admin-form-card {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 28px 32px 52px;
+  box-sizing: border-box;
+  margin-bottom: 0;
+  overflow-x: hidden;
+  /* guard against any child overflow */
+}
+
+/* ── Header ── */
+.add-form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+}
+
+.add-form-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.add-form-header-icon {
+  color: #2563eb;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.add-form-title {
+  font-size: clamp(1.1rem, 1.8vw + 0.5rem, 1.65rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  color: #0f172a;
+  margin: 0;
+  font-family: Inter, "SF Pro Display", "Segoe UI", sans-serif;
+}
+
+.add-form-subtitle {
+  font-size: 0.82rem;
+  color: #9ca3af;
+  margin: 0;
+}
+
+/* ── Divider ── */
+.add-form-divider {
+  height: 1.5px;
+  background: rgba(148, 163, 184, 0.14);
+  margin: 0.85rem 0 0;
+}
+
+/* ── Body ── */
+.add-form-body {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.75rem 0;
+}
+
+/* ─────────────────────────────────────────
+   COVER SECTION
+   Desktop: 140px column with centred items
+   Tablet/Mobile: row — preview left,
+   controls stacked on the right
+───────────────────────────────────────── */
+.add-cover-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  flex-shrink: 0;
+  width: 140px;
+}
+
+.add-cover-preview {
+  width: 120px;
+  height: 164px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 2px solid #e5e7eb;
+}
+
+.add-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  background: #ffffff;
+}
+
+.add-cover-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 0 8px;
+}
+
+.add-cover-placeholder svg {
+  opacity: 0.25;
+}
+
+/* ── Controls wrapper (upload btn + URL + hint) ──
+   Groups all non-preview items so they always
+   stack as a column regardless of parent direction */
+.add-cover-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  align-items: stretch;
+}
+
+/* Upload button */
+.add-upload-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0.4rem 0.85rem;
+  background: #f0f4ff;
+  border: 1.5px solid #c7d7fd;
+  border-radius: 8px;
+  color: #2563eb;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.16s ease, border-color 0.16s ease;
+  white-space: nowrap;
+  width: 100%;
+  justify-content: center;
+}
+
+.add-upload-btn:hover:not(:disabled) {
+  background: #dce8ff;
+  border-color: #93c5fd;
+}
+
+.add-upload-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.add-upload-hint {
+  font-size: 0.68rem;
+  color: #9ca3af;
+  margin: 0;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* Hidden file input */
+.add-file-input-hidden {
+  display: none;
+}
+
+/* ── Form fields column ── */
+.add-form-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  min-width: 0;
+  max-width: 520px;
+}
+
+/* Field group */
+.add-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+  /* prevent flex children from overflowing */
+}
+
+.add-field-group--small {
+  width: 110px;
+  max-width: 110px;
+  flex-shrink: 0;
+}
+
+/* Field row */
+.add-field-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+/* Label */
+.add-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #374151;
+  letter-spacing: 0.01em;
+}
+
+.add-required {
+  color: #dc2626;
+  margin-left: 2px;
+}
+
+/* Input / select */
+.add-input {
+  width: 100%;
+  min-width: 0;
+  /* prevent flex overflow */
+  padding: 0.5rem 0.75rem;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 9px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  /* consistent height across input types */
+  color: #111827;
+  background: #fafafa;
+  outline: none;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+  box-sizing: border-box;
+  appearance: auto;
+}
+
+.add-input:focus {
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.add-input::placeholder {
+  color: #c1c8d4;
+}
+
+.add-input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.add-input[type="number"]::-webkit-inner-spin-button,
+.add-input[type="number"]::-webkit-outer-spin-button {
+  opacity: 1;
+}
+
+/* ── Checkbox row ── */
+.add-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.add-checkbox-row input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  accent-color: #2563eb;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.add-checkbox-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* New Arrival badge */
+.add-new-arrival-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background: #eff6ff;
+  border: 1.5px solid #bfdbfe;
+  border-radius: 20px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #2563eb;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Arrival group — vertically aligned with copies field */
+.add-arrival-group {
+  flex: 1;
+  justify-content: flex-end;
+  padding-bottom: 0.55rem;
+}
+
+/* ── Footer ── */
+.add-form-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.1rem 0 0;
+  border-top: 1.5px solid rgba(148, 163, 184, 0.14);
+  margin-top: 0.25rem;
+}
+
+/* Primary button */
+.add-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.52rem 1.6rem;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease,
+    box-shadow 0.16s ease;
+}
+
+.add-btn-primary:hover:not(:disabled) {
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+
+.add-btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.add-btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* URL input below cover */
+.add-cover-url-input {
+  width: 100%;
+  padding: 0.42rem 0.6rem;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.72rem;
+  color: #111827;
+  background: #fafafa;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.add-cover-url-input:focus {
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.add-cover-url-input::placeholder {
+  color: #c1c8d4;
+  font-size: 0.68rem;
+}
+
+.add-cover-url-input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+
+/* ── Tablet: 641px – 860px ── */
+@media (max-width: 860px) {
+  .admin-form-card {
+    padding: 22px 20px 44px;
+  }
+
+  /* Body: keep side-by-side — cover col narrows, fields take the rest */
+  .add-form-body {
+    gap: 1.1rem;
+    padding: 1.5rem 0;
+  }
+
+  /* Cover section: fixed narrow column — tighter than desktop */
+  .add-cover-section {
+    width: 120px;
+    /* fixed, not 100% — body stays side-by-side */
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  /* Slightly shorter preview so it doesn't dominate the column height */
+  .add-cover-preview {
+    width: 100px;
+    height: 138px;
+  }
+
+  /* Upload button full-width within the narrow column */
+  .add-upload-btn {
+    font-size: 0.72rem;
+    padding: 0.38rem 0.6rem;
+  }
+
+  /* Hint stays centred under controls */
+  .add-upload-hint {
+    text-align: center;
+    font-size: 0.67rem;
+  }
+
+  /* Field rows: keep side-by-side, no wrap yet */
+  .add-field-row {
+    flex-wrap: nowrap;
+    gap: 0.65rem;
+  }
+
+  /* Year field: slightly wider so placeholder fits */
+  .add-field-group--small {
+    width: 96px;
+    max-width: 96px;
+  }
+
+  /* Fields: remove max-width cap so they fill available space */
+  .add-form-fields {
+    max-width: 100%;
+  }
+}
+
+/* ── Small tablet / large phone: ≤ 640px ── */
+@media (max-width: 640px) {
+  .admin-form-card {
+    padding: 18px 14px 36px;
+  }
+
+  /* Body: stack cover above form fields */
+  .add-form-body {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.2rem 0;
+  }
+
+  /* Cover section: horizontal strip — preview left, controls right */
+  .add-cover-section {
+    width: 100%;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+
+  .add-cover-preview {
+    width: 80px;
+    height: 110px;
+    flex-shrink: 0;
+  }
+
+  /* All direct children after preview fill remaining space */
+  .add-cover-section>.add-upload-btn,
+  .add-cover-section>.add-file-input-hidden,
+  .add-cover-section>.add-field-group,
+  .add-cover-section>.add-upload-hint {
+    /* handled via .add-cover-controls wrapper if present;
+       direct children also need to stretch */
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* If controls are wrapped — fill available space */
+  .add-cover-controls {
+    flex: 1;
+    min-width: 0;
+    align-items: stretch;
+  }
+
+  /* Hint: left-aligned when controls are horizontal */
+  .add-upload-hint {
+    text-align: left;
+    font-size: 0.67rem;
+  }
+
+  /* Upload button: compact mobile width */
+  .add-upload-btn {
+    width: fit-content;
+    min-width: 135px;
+    max-width: 160px;
+    font-size: 0.72rem;
+    padding: 0.38rem 0.75rem;
+    align-self: flex-start;
+  }
+
+  /* Form fields: uncapped, full width */
+  .add-form-fields {
+    max-width: 100%;
+    gap: 0.75rem;
+  }
+
+  /* Field rows: keep side-by-side with tighter gap */
+  .add-field-row {
+    gap: 0.55rem;
+    flex-wrap: nowrap;
+    /* default: no wrap; specific rows below override */
+  }
+
+  /* Year field: give it a natural flex width, not rigid px */
+  .add-field-group--small {
+    width: auto;
+    max-width: 88px;
+    flex: 0 0 88px;
+  }
+
+  /* Arrival group: align baseline with copies input */
+  .add-arrival-group {
+    padding-bottom: 0;
+    justify-content: flex-start;
+    align-self: flex-end;
+    padding-bottom: 0.1rem;
+  }
+
+  /* Footer: centred */
+  .add-form-footer {
+    justify-content: center;
+    padding: 0.9rem 0 0;
+  }
+
+  .add-btn-primary {
+    width: auto;
+    min-width: 160px;
+    max-width: 280px;
+    justify-content: center;
+    padding: 0.52rem 1.25rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* ── Mobile: ≤ 480px ── */
+@media (max-width: 480px) {
+  .admin-form-card {
+    padding: 16px 12px 32px;
+  }
+
+  .add-cover-section {
+    gap: 0.7rem;
+  }
+
+  .add-cover-preview {
+    width: 70px;
+    height: 96px;
+    border-radius: 8px;
+  }
+
+  /* Department row: allow Year to wrap below Department */
+  .add-field-row:not(.add-field-row--copies):not(.add-field-row--inline) {
+    flex-wrap: wrap;
+  }
+
+  /* When Year wraps, let it take natural width — not force 100% */
+  .add-field-group--small {
+    flex: 0 0 auto;
+    width: 88px;
+    max-width: 88px;
+  }
+
+  /* Course Code + Location: stay side by side — use .add-field-row--inline
+     or simply rely on the fact that both have flex:1 and fit fine at 480px.
+     We only wrap the Dept/Year row, not Course/Location. */
+
+  /* Copies + New Arrival: wrap so arrival goes on its own line */
+  .add-field-row--copies {
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    align-items: flex-start;
+  }
+
+  .add-arrival-group {
+    flex: 1 1 100%;
+    padding-bottom: 0;
+    justify-content: flex-start;
+  }
+
+  .add-upload-hint {
+    font-size: 0.66rem;
+  }
+
+  .add-upload-btn {
+    min-width: 120px;
+    max-width: 145px;
+    font-size: 0.7rem;
+    padding: 0.34rem 0.65rem;
+  }
+
+  .add-form-fields {
+    gap: 0.7rem;
+  }
+
+  .add-btn-primary {
+    min-width: 148px;
+    max-width: 240px;
+    padding: 0.5rem 1rem;
+    font-size: 0.78rem;
+    border-radius: 9px;
+  }
+}
+
+/* ── Very small: ≤ 380px ── */
+@media (max-width: 380px) {
+  .admin-form-card {
+    padding: 14px 10px 28px;
+  }
+
+  .add-cover-preview {
+    width: 62px;
+    height: 86px;
+  }
+
+  /* At very narrow widths, Course Code + Location also wrap */
+  .add-field-row {
+    flex-wrap: wrap;
+  }
+
+  /* But Course Code + Location stay side-by-side — they're equal flex and fit fine */
+  .add-field-row--inline {
+    flex-wrap: nowrap;
+  }
+
+  /* All small fields go full-width when wrapping */
+  .add-field-group--small {
+    flex: 1 1 100%;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Copies field: give it a proportional width, not forced full */
+  .add-field-row--copies .add-field-group--small {
+    flex: 0 0 auto;
+    width: 90px;
+    max-width: 90px;
+  }
+
+  .add-form-fields {
+    gap: 0.65rem;
+  }
+
+  .add-btn-primary {
+    min-width: 136px;
+    font-size: 0.75rem;
+  }
+
+  .add-form-title {
+    font-size: 1rem;
+  }
+
+  .add-form-subtitle {
+    font-size: 0.76rem;
+  }
+}

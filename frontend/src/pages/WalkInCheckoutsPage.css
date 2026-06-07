@@ -1,0 +1,1237 @@
+/* ============================================================
+   WalkInCheckoutsPage.css
+   Layout & spacing: exact match to AdminReservationsPage (arp-*)
+   Chip colours: exact match to arp-chip gradient system
+   All classes scoped to wicp-* prefix.
+============================================================ */
+
+/* =========================================
+   PAGE WRAPPER — pixel-perfect match to .arp-page
+========================================= */
+.wicp-page {
+  width: min(100%, calc(100% - 32px));
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 28px 0 52px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  position: relative;
+  isolation: isolate;
+  box-sizing: border-box;
+}
+
+/* Fixed full-bleed background — same gradient as arp-page::before */
+.wicp-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(
+    --app-bg,
+    linear-gradient(145deg, #eff6ff 0%, #f0f4ff 40%, #f5f3ff 100%)
+  );
+  background-attachment: fixed;
+}
+
+/* =========================================
+   PAGE HEADER — mirrors .arp-header
+========================================= */
+.wicp-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.wicp-header-left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Back button — mirrors .arp-back-btn */
+.wicp-back-btn {
+  margin-bottom: 10px !important;
+}
+
+/* Title — mirrors .arp-title */
+.wicp-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -0.03em;
+  margin: 0 0 5px;
+  line-height: 1.2;
+}
+
+.wicp-title-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #2563eb;
+}
+
+/* Subtitle — mirrors .arp-subtitle */
+.wicp-subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 400;
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* Right actions — mirrors .arp-header-actions */
+.wicp-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+/* =========================================
+   BUTTONS — mirrors ARP primary/secondary/danger-soft-btn
+========================================= */
+.primary-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border-radius: 10px;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(29, 78, 216, 0.22);
+  transition:
+    background   0.18s ease,
+    box-shadow   0.18s ease,
+    transform    0.15s ease;
+  white-space: nowrap;
+  line-height: 1;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.primary-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  box-shadow: 0 4px 14px rgba(29, 78, 216, 0.32);
+  transform: translateY(-1px);
+}
+
+.primary-btn:active  { transform: translateY(1px); }
+
+.primary-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+}
+
+.primary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.secondary-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border-radius: 10px;
+  border: 1.5px solid #e5e7eb;
+  background: #ffffff;
+  color: #374151;
+  cursor: pointer;
+  transition:
+    background   0.18s ease,
+    border-color 0.18s ease,
+    box-shadow   0.18s ease,
+    transform    0.15s ease;
+  white-space: nowrap;
+  line-height: 1;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.secondary-btn:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #d1d5db;
+  color: #111827;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
+}
+
+.secondary-btn:active { transform: translateY(1px); }
+
+.secondary-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+.secondary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.danger-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border-radius: 10px;
+  border: 1.5px solid #fca5a5;
+  background: #ffffff;
+  color: #dc2626;
+  cursor: pointer;
+  transition:
+    background   0.18s ease,
+    border-color 0.18s ease,
+    box-shadow   0.18s ease,
+    transform    0.15s ease;
+  white-space: nowrap;
+  line-height: 1;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.danger-btn:hover:not(:disabled) {
+  background: #fff1f2;
+  border-color: #f87171;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.12);
+  transform: translateY(-1px);
+}
+
+.danger-btn:active { transform: translateY(1px); }
+
+.danger-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Size variants */
+.compact-btn {
+  padding: 5px 11px;
+  font-size: 0.76rem;
+  border-radius: 8px;
+}
+
+.small-btn {
+  padding: 6px 12px;
+  font-size: 0.78rem;
+  border-radius: 9px;
+}
+
+/* =========================================
+   STATS GRID — mirrors .arp-stats-grid
+========================================= */
+.wicp-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+/* Stat card — mirrors .arp-stat-card */
+.wicp-stat-card {
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    0 8px 24px rgba(0, 0, 0, 0.05);
+  border: 1.5px solid #f3f4f6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 8px;
+  gap: 6px;
+  text-align: center;
+  transition:
+    transform    0.22s ease,
+    box-shadow   0.22s ease,
+    border-color 0.22s ease;
+}
+
+.wicp-stat-card:hover {
+  transform: translateY(-4px) scale(1.015);
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.1),
+    0 18px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Icon box — mirrors .arp-stat-icon */
+.wicp-stat-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+  color: #374151;
+  flex-shrink: 0;
+}
+
+/* Count — mirrors .arp-stat-count */
+.wicp-stat-count {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+/* Label — mirrors .arp-stat-label */
+.wicp-stat-label {
+  font-size: 0.67rem;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.3;
+}
+
+/* Tone variants — mirrors arp tone system exactly */
+.wicp-stat-card.tone-blue   .wicp-stat-icon  { background: #eff6ff; color: #2563eb; }
+.wicp-stat-card.tone-blue   .wicp-stat-count { color: #1d4ed8; }
+.wicp-stat-card.tone-green  .wicp-stat-icon  { background: #f0fdf4; color: #16a34a; }
+.wicp-stat-card.tone-green  .wicp-stat-count { color: #15803d; }
+.wicp-stat-card.tone-amber  .wicp-stat-icon  { background: #fff7ed; color: #d97706; }
+.wicp-stat-card.tone-amber  .wicp-stat-count { color: #b45309; }
+.wicp-stat-card.tone-purple .wicp-stat-icon  { background: #faf5ff; color: #7c3aed; }
+.wicp-stat-card.tone-purple .wicp-stat-count { color: #6d28d9; }
+.wicp-stat-card.tone-slate  .wicp-stat-icon  { background: #f8fafc; color: #64748b; }
+.wicp-stat-card.tone-slate  .wicp-stat-count { color: #475569; }
+.wicp-stat-card.tone-red    .wicp-stat-icon  { background: #fff1f2; color: #e11d48; }
+.wicp-stat-card.tone-red    .wicp-stat-count { color: #be123c; }
+.wicp-stat-card.tone-orange .wicp-stat-icon  { background: #fff7ed; color: #c2410c; }
+.wicp-stat-card.tone-orange .wicp-stat-count { color: #c2410c; }
+
+/* =========================================
+   TOOLBAR — mirrors .arp-toolbar (white card)
+========================================= */
+.wicp-toolbar {
+  position: relative;
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.05),
+    0 8px 20px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+/* Fade-out edge hints — mirrors arp-toolbar::before/after */
+.wicp-toolbar::before,
+.wicp-toolbar::after {
+  content: "";
+  position: absolute;
+  top: 62px;
+  bottom: 52px;
+  width: 28px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.wicp-toolbar::before {
+  left: 0;
+  background: linear-gradient(to right, #ffffff, transparent);
+}
+
+.wicp-toolbar::after {
+  right: 0;
+  background: linear-gradient(to left, #ffffff, transparent);
+}
+
+/* Search row — mirrors .arp-toolbar-search */
+.wicp-toolbar-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.wicp-search-icon {
+  color: #9ca3af;
+  flex-shrink: 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+}
+
+.wicp-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 0.875rem;
+  color: #111827;
+  background: transparent;
+  font-weight: 400;
+  min-width: 0;
+  font-family: inherit;
+}
+
+.wicp-search-input::placeholder { color: #9ca3af; }
+
+/* Clear button — mirrors .arp-search-clear */
+.wicp-search-clear {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: #f3f4f6;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 800;
+  line-height: 1;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.18s ease, color 0.18s ease;
+  font-family: inherit;
+}
+
+.wicp-search-clear:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* Filter chips row — mirrors .arp-filter-row */
+.wicp-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-bottom: 1px solid #f9fafb;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+.wicp-filter-row::-webkit-scrollbar        { height: 8px; }
+.wicp-filter-row::-webkit-scrollbar-track  { background: #f1f5f9; border-radius: 999px; }
+.wicp-filter-row::-webkit-scrollbar-thumb  { background: #cbd5e1; border-radius: 999px; }
+.wicp-filter-row::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+.wicp-filter-row:last-child                { border-bottom: none; }
+
+/* Sort row — sits in a second row like arp-date-filter */
+.wicp-sort-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-top: 1px solid #f9fafb;
+}
+
+.wicp-sort-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+/* Sort select — mirrors .arp-date-input */
+.wicp-sort-select {
+  padding: 5px 10px;
+  border-radius: 9px;
+  border: 1.5px solid #e5e7eb;
+  background: #fafafa;
+  font-size: 0.8rem;
+  color: #111827;
+  outline: none;
+  min-height: 34px;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.wicp-sort-select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  background: #fff;
+}
+
+/* =========================================
+   FILTER CHIPS — exact match to .arp-chip system
+========================================= */
+.wicp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+  background: #f9fafb;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  transition:
+    background    0.18s ease,
+    border-color  0.18s ease,
+    color         0.18s ease,
+    transform     0.18s ease,
+    box-shadow    0.18s ease;
+  font-family: inherit;
+  line-height: 1;
+}
+
+.wicp-chip:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  transform: translateY(-1px);
+}
+
+/* "All" active chip — mirrors .arp-chip.active */
+.wicp-chip.active {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(29, 78, 216, 0.26);
+}
+
+/* Active chip — mirrors .arp-chip.active-collected (green) */
+.wicp-chip.active-active {
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(21, 128, 61, 0.26);
+}
+
+/* Active chip — mirrors .arp-chip.active-overdue (amber) */
+.wicp-chip.active-overdue {
+  background: linear-gradient(135deg, #d97706, #b45309);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(180, 83, 9, 0.26);
+}
+
+/* Active chip — mirrors .arp-chip.active-returned (purple) */
+.wicp-chip.active-returned {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(109, 40, 217, 0.26);
+}
+
+/* Active chip — damaged (orange) */
+.wicp-chip.active-damaged {
+  background: linear-gradient(135deg, #ea580c, #c2410c);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(194, 65, 12, 0.26);
+}
+
+/* Active chip — lost (rose/red) */
+.wicp-chip.active-lost {
+  background: linear-gradient(135deg, #e11d48, #be123c);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(190, 18, 60, 0.26);
+}
+
+/* Chip count badge — mirrors .arp-chip-count */
+.wicp-chip-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.28);
+  color: inherit;
+}
+
+/* Inactive chip count — mirrors .arp-chip:not(.active) .arp-chip-count */
+.wicp-chip:not(.active):not(.active-active):not(.active-overdue):not(.active-returned):not(.active-damaged):not(.active-lost) .wicp-chip-count {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+/* =========================================
+   TABLE CARD WRAPPER
+========================================= */
+.wicp-table-card {
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.055),
+    0 10px 28px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e9ecef;
+  overflow: hidden;
+  position: relative;
+}
+
+/* TABLE SCROLL WRAPPER */
+.wicp-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* =========================================
+   TABLE
+========================================= */
+.wicp-table {
+  width: 100%;
+  min-width: 1200px;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.wicp-table thead {
+  background: #f8fafc;
+}
+
+.wicp-table th {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 0.62rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #9ca3af;
+  border-bottom: 1.5px solid #e9ecef;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.wicp-table td {
+  padding: 11px 14px;
+  color: #374151;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+  line-height: 1.4;
+}
+
+.wicp-table tbody tr:last-child td { border-bottom: none; }
+
+.wicp-table tbody tr:hover td { background: #f0f6ff; }
+
+/* Overdue row */
+.wicp-row-overdue td {
+  background: linear-gradient(160deg, #fffbeb 0%, #ffffff 80%);
+}
+
+.wicp-row-overdue:hover td { background: #fef9c3 !important; }
+
+/* Column widths */
+.wicp-col-num        { width: 44px; text-align: center; }
+.wicp-col-book       { min-width: 220px; max-width: 300px; }
+.wicp-col-checkedout { white-space: nowrap; }
+.wicp-col-returned   { white-space: nowrap; min-width: 130px; }
+.wicp-col-indicator  { min-width: 160px; }
+.wicp-col-overdue    { min-width: 210px; }
+.wicp-col-totalfine  { min-width: 100px; white-space: nowrap; }
+
+/* Cell helpers */
+.wicp-cell-num {
+  text-align: center;
+  color: #9ca3af;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.wicp-cell-date {
+  white-space: nowrap;
+  font-size: 0.82rem;
+  color: #374151;
+}
+
+/* Overdue date */
+.wicp-date-overdue {
+  color: #c2410c;
+  font-weight: 700;
+}
+
+/* Overdue days pill */
+.wicp-overdue-days {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 700;
+  color: #b45309;
+  background: #fff7ed;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid #fed7aa;
+  font-size: 0.72rem;
+  margin-left: 6px;
+}
+
+/* DateTime cell — stacks date on top of time */
+.wicp-datetime {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  white-space: nowrap;
+}
+
+.wicp-datetime-date {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #374151;
+  line-height: 1.2;
+}
+
+.wicp-datetime-time {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #9ca3af;
+  line-height: 1.2;
+}
+
+/* Dash placeholder */
+.wicp-cell-dash {
+  color: #d1d5db;
+  font-weight: 500;
+}
+
+/* Stacks date/time on top of fine+status inside indicator cells */
+.wicp-col-cell-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Overdue cell — single inline line: "2 Days - ₹40 — Paid/Pending" */
+.wicp-overdue-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+}
+
+/* The "N Days - ₹X" portion */
+.wicp-overdue-detail {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #c2410c;
+}
+
+/* The "—" separator */
+.wicp-overdue-sep {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+/* Paid / Pending text label */
+.wicp-overdue-status {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+
+.wicp-overdue-status--paid {
+  background: #f0fdf4;
+  color: #15803d;
+  border-color: #bbf7d0;
+}
+
+.wicp-overdue-status--pending {
+  background: #fff1f2;
+  color: #be123c;
+  border-color: #fecdd3;
+}
+
+/* Sticky Student column — keeps avatar/name visible during horizontal scroll */
+.wicp-table thead th:nth-child(2) {
+  position: sticky;
+  left: 44px;
+  z-index: 2;
+  background: #f8fafc;
+}
+
+.wicp-table tbody td:nth-child(2) {
+  position: sticky;
+  left: 44px;
+  z-index: 1;
+  background: #ffffff;
+}
+
+.wicp-table tbody tr:hover td:nth-child(2) { background: #f0f6ff; }
+.wicp-row-overdue td:nth-child(2)           { background: linear-gradient(160deg, #fffbeb 0%, #ffffff 80%); }
+.wicp-row-overdue:hover td:nth-child(2)     { background: #fef9c3 !important; }
+.wicp-row-damaged td:nth-child(2)           { background: linear-gradient(160deg, #fff7ed 0%, #ffffff 80%); }
+.wicp-row-damaged:hover td:nth-child(2)     { background: #ffedd5 !important; }
+.wicp-row-lost td:nth-child(2)              { background: linear-gradient(160deg, #fff1f2 0%, #ffffff 80%); }
+.wicp-row-lost:hover td:nth-child(2)        { background: #ffe4e6 !important; }
+
+/* Student cell */
+.wicp-student-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Avatar */
+.wicp-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #ffffff;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.28);
+  user-select: none;
+  overflow: hidden;
+}
+
+/* Avatar image — fills the circle */
+.wicp-avatar__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+.wicp-student-name {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  display: block;
+}
+
+.wicp-student-id {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  font-weight: 500;
+  margin-top: 1px;
+  display: block;
+}
+
+/* Book title */
+.wicp-book-title {
+  font-weight: 700;
+  color: #111827;
+  font-size: 0.875rem;
+  line-height: 1.35;
+}
+
+/* Notes */
+.wicp-notes {
+  font-size: 0.8rem;
+  color: #6b7280;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Row actions */
+.wicp-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+
+/* =========================================
+   STATUS BADGES
+========================================= */
+.wicp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  line-height: 1.5;
+}
+
+.wicp-badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* Active — green (mirrors arp-chip.active-collected palette) */
+.wicp-badge-active {
+  background: #f0fdf4;
+  color: #15803d;
+  border-color: #bbf7d0;
+}
+
+/* Overdue — amber (mirrors arp-chip.active-overdue palette) */
+.wicp-badge-overdue {
+  background: #fff7ed;
+  color: #c2410c;
+  border-color: #fed7aa;
+}
+
+/* Returned — purple (mirrors arp-chip.active-returned palette) */
+.wicp-badge-returned {
+  background: #faf5ff;
+  color: #6d28d9;
+  border-color: #ddd6fe;
+}
+
+/* Damaged — orange */
+.wicp-badge-damaged {
+  background: #fff7ed;
+  color: #c2410c;
+  border-color: #fed7aa;
+}
+
+/* Lost — rose/red */
+.wicp-badge-lost {
+  background: #fff1f2;
+  color: #be123c;
+  border-color: #fecdd3;
+}
+
+/* =========================================
+   TABLE FOOTER
+========================================= */
+.wicp-table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 10px 16px;
+  border-top: 1px solid #f1f5f9;
+  background: #f8fafc;
+}
+
+.wicp-result-count {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #374151;
+  white-space: nowrap;
+}
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+.wicp-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 52px 20px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1.5px dashed #e5e7eb;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  gap: 10px;
+}
+
+.wicp-empty-icon {
+  opacity: 0.4;
+  margin-bottom: 4px;
+  line-height: 1;
+  color: #9ca3af;
+}
+
+.wicp-empty-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0;
+}
+
+.wicp-empty-sub {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+  max-width: 340px;
+  line-height: 1.5;
+}
+
+/* =========================================
+   LOADING STATE
+========================================= */
+.wicp-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 52px 20px;
+  gap: 14px;
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1.5px dashed #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.wicp-loading::before {
+  content: "";
+  display: block;
+  width: 38px;
+  height: 38px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: wicpSpin 0.75s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes wicpSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* =========================================
+   ANIMATION
+========================================= */
+.wicp-fade-in {
+  animation: wicpFadeIn 0.22s ease both;
+}
+
+@keyframes wicpFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   RESPONSIVE — mirrors ARP breakpoints exactly
+========================================= */
+
+/* 960px — stat grid 3-col */
+@media (max-width: 960px) {
+  .wicp-stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 640px — mobile layout, mirrors ARP @640 */
+@media (max-width: 640px) {
+  .wicp-page {
+    width: calc(100% - 28px);
+    padding: 18px 0 40px;
+    gap: 16px;
+  }
+
+  .wicp-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .wicp-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .wicp-header-left  { align-items: flex-start; }
+  .wicp-back-btn     { margin-bottom: 8px !important; }
+  .wicp-header-actions { justify-content: flex-start; }
+
+  .primary-btn,
+  .secondary-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .wicp-header-actions { width: 100%; }
+}
+
+/* 420px — 2-col stats */
+@media (max-width: 420px) {
+  .wicp-stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* =========================================
+   DAMAGED / LOST SECTIONS
+========================================= */
+.wicp-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.wicp-section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: 1.5px solid transparent;
+}
+
+.wicp-section-header--damaged {
+  background: #fff7ed;
+  border-color: #fed7aa;
+}
+
+.wicp-section-header--lost {
+  background: #fff1f2;
+  border-color: #fecdd3;
+}
+
+.wicp-section-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.wicp-section-icon--damaged {
+  background: #fed7aa;
+  color: #c2410c;
+}
+
+.wicp-section-icon--lost {
+  background: #fecdd3;
+  color: #be123c;
+}
+
+.wicp-section-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0;
+  flex: 1;
+  letter-spacing: -0.02em;
+}
+
+.wicp-section-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.wicp-section-count--damaged {
+  background: #c2410c;
+  color: #ffffff;
+}
+
+.wicp-section-count--lost {
+  background: #be123c;
+  color: #ffffff;
+}
+
+.wicp-section-empty {
+  padding: 32px 20px;
+}
+
+/* Damaged row */
+.wicp-row-damaged td {
+  background: linear-gradient(160deg, #fff7ed 0%, #ffffff 80%);
+}
+
+.wicp-row-damaged:hover td {
+  background: #ffedd5 !important;
+}
+
+/* Lost row */
+.wicp-row-lost td {
+  background: linear-gradient(160deg, #fff1f2 0%, #ffffff 80%);
+}
+
+.wicp-row-lost:hover td {
+  background: #ffe4e6 !important;
+}
+
+/* Fine amount */
+.wicp-fine-amount {
+  font-weight: 700;
+  color: #dc2626;
+  font-size: 0.85rem;
+}
+
+/* Paid / Unpaid badges */
+.wicp-badge-paid {
+  background: #f0fdf4;
+  color: #15803d;
+  border-color: #bbf7d0;
+}
+
+.wicp-badge-unpaid {
+  background: #fff1f2;
+  color: #be123c;
+  border-color: #fecdd3;
+}
+
+/* =========================================
+   PRINT
+========================================= */
+@media print {
+  .wicp-page         { background: #fff; padding: 0; }
+  .wicp-page::before { display: none; }
+
+  .wicp-header-actions,
+  .wicp-toolbar,
+  .wicp-back-btn { display: none !important; }
+
+  .wicp-stat-card,
+  .wicp-table-card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+    break-inside: avoid;
+  }
+
+  .wicp-table-wrap { overflow: visible; }
+  .wicp-table      { min-width: unset; }
+}

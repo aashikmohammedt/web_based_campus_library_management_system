@@ -1,0 +1,1124 @@
+/* ============================================================
+   StudentReservationsPage.css  — Pixel-consistent with AdminReservationsPage
+   Visual language: mirrors AdminReservationsPage.css exactly.
+   All classes scoped to Student Reservations page.
+   Import inside StudentReservationsPage.jsx.
+============================================================ */
+
+/* =========================================
+   PAGE WRAPPER
+========================================= */
+.srp-page {
+  width: min(100%, calc(100% - 32px));
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 28px 0 52px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  position: relative;
+  isolation: isolate;
+}
+
+/* Fixed full-bleed background — matches Admin's soft gradient canvas */
+.srp-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    var(
+      --app-bg,
+      linear-gradient(145deg, #eff6ff 0%, #f0f4ff 40%, #f5f3ff 100%)
+    );
+  background-attachment: fixed;
+}
+
+/* =========================================
+   PAGE HEADER
+   (shares .arp-* class names with Admin — identical rules)
+========================================= */
+.arp-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.arp-header-left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.arp-back-btn {
+  margin-bottom: 10px;
+}
+
+.arp-title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -0.03em;
+  margin: 0 0 5px;
+  line-height: 1.2;
+}
+
+.arp-subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 400;
+  margin: 0;
+  line-height: 1.55;
+}
+
+.arp-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+.arp-results-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #374151;
+}
+
+/* =========================================
+   STATS GRID — 5 columns for student page
+   Responsive behaviour mirrors admin exactly.
+========================================= */
+.srp-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+
+/* =========================================
+   STAT CARDS — pixel-identical to .arp-stat-card
+========================================= */
+.arp-stat-card {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    0 8px 24px rgba(0, 0, 0, 0.05);
+  border: 1.5px solid #f3f4f6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 8px;
+  gap: 6px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.arp-stat-card:hover {
+  transform: translateY(-4px) scale(1.015);
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.1),
+    0 18px 40px rgba(0, 0, 0, 0.08);
+}
+
+.arp-stat-card:active { transform: translateY(-2px) scale(1.01); }
+
+.arp-stat-card.active {
+  border-color: #bfdbfe;
+  background: linear-gradient(180deg, #eff6ff 0%, #fff 70%);
+  box-shadow:
+    0 6px 18px rgba(37, 99, 235, 0.14),
+    0 18px 40px rgba(37, 99, 235, 0.08);
+}
+
+.arp-stat-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  background: #f3f4f6;
+  flex-shrink: 0;
+}
+
+.arp-stat-count {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.arp-stat-label {
+  font-size: 0.67rem;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.3;
+}
+
+/* Tone variants */
+.arp-stat-card.tone-blue   .arp-stat-icon  { background: #eff6ff; color: #2563eb; }
+.arp-stat-card.tone-blue   .arp-stat-count { color: #1d4ed8; }
+.arp-stat-card.tone-green  .arp-stat-icon  { background: #f0fdf4; color: #16a34a; }
+.arp-stat-card.tone-green  .arp-stat-count { color: #15803d; }
+.arp-stat-card.tone-amber  .arp-stat-icon  { background: #fff7ed; color: #d97706; }
+.arp-stat-card.tone-amber  .arp-stat-count { color: #b45309; }
+.arp-stat-card.tone-purple .arp-stat-icon  { background: #faf5ff; color: #7c3aed; }
+.arp-stat-card.tone-purple .arp-stat-count { color: #6d28d9; }
+.arp-stat-card.tone-slate  .arp-stat-icon  { background: #f8fafc; color: #64748b; }
+.arp-stat-card.tone-slate  .arp-stat-count { color: #475569; }
+.arp-stat-card.tone-red    .arp-stat-icon  { background: #fff1f2; color: #e11d48; }
+.arp-stat-card.tone-red    .arp-stat-count { color: #be123c; }
+
+/* Active tone variants */
+.arp-stat-card.tone-blue.active   { border-color: #bfdbfe; }
+.arp-stat-card.tone-green.active  { border-color: #bbf7d0; background: linear-gradient(180deg, #f0fdf4 0%, #fff 70%); }
+.arp-stat-card.tone-amber.active  { border-color: #fed7aa; background: linear-gradient(180deg, #fff7ed 0%, #fff 70%); }
+.arp-stat-card.tone-purple.active { border-color: #ddd6fe; background: linear-gradient(180deg, #faf5ff 0%, #fff 70%); }
+.arp-stat-card.tone-slate.active  { border-color: #e2e8f0; background: linear-gradient(180deg, #f8fafc 0%, #fff 70%); }
+
+/* ── Missing tone variants ── */
+.arp-stat-card.tone-orange .arp-stat-icon  { background: #fff7ed; color: #ea580c; }
+.arp-stat-card.tone-orange .arp-stat-count { color: #c2410c; }
+.arp-stat-card.tone-orange.active { border-color: #fed7aa; background: linear-gradient(180deg, #fff7ed 0%, #fff 70%); }
+
+.arp-stat-card.tone-gray .arp-stat-icon  { background: #f9fafb; color: #6b7280; }
+.arp-stat-card.tone-gray .arp-stat-count { color: #374151; }
+.arp-stat-card.tone-gray.active { border-color: #e5e7eb; background: linear-gradient(180deg, #f9fafb 0%, #fff 70%); }
+
+.arp-stat-card.tone-teal .arp-stat-icon  { background: #f0fdfa; color: #0d9488; }
+.arp-stat-card.tone-teal .arp-stat-count { color: #0f766e; }
+.arp-stat-card.tone-teal.active { border-color: #99f6e4; background: linear-gradient(180deg, #f0fdfa 0%, #fff 70%); }
+
+.arp-stat-card.tone-red.active { border-color: #fecdd3; background: linear-gradient(180deg, #fff1f2 0%, #fff 70%); }
+
+/* =========================================
+   TOOLBAR — Search + Filter Chips
+   Pixel-identical to AdminReservationsPage
+========================================= */
+.arp-toolbar {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), 0 8px 20px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+/* Search bar */
+.arp-toolbar-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.arp-search-icon {
+  font-size: 0.95rem;
+  color: #9ca3af;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.arp-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 0.875rem;
+  color: #111827;
+  background: transparent;
+  font-weight: 400;
+  min-width: 0;
+}
+
+.arp-search-input::placeholder { color: #9ca3af; }
+
+.arp-search-clear {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: #f3f4f6;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 800;
+  line-height: 1;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.arp-search-clear:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* Filter chips row */
+.arp-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  border-bottom: 1px solid #f9fafb;
+}
+
+.arp-filter-row::-webkit-scrollbar { display: none; }
+.arp-filter-row:last-child { border-bottom: none; }
+
+.arp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+  background: #f9fafb;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    background  0.18s ease,
+    border-color 0.18s ease,
+    color        0.18s ease,
+    transform    0.18s ease,
+    box-shadow   0.18s ease;
+}
+
+.arp-chip:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  transform: translateY(-1px);
+}
+
+/* Generic active */
+.arp-chip.active {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(29, 78, 216, 0.26);
+}
+
+/* Per-section active gradients */
+.arp-chip.active-prebooked { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+.arp-chip.active-collected { background: linear-gradient(135deg, #16a34a, #15803d); }
+.arp-chip.active-expired   { background: linear-gradient(135deg, #d97706, #b45309); }
+.arp-chip.active-cancelled { background: linear-gradient(135deg, #64748b, #475569); }
+.arp-chip.active-walkin    { background: linear-gradient(135deg, #0891b2, #0e7490); }
+
+.arp-chip-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.28);
+  color: inherit;
+}
+
+.arp-chip:not(.active) .arp-chip-count {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+/* =========================================
+   SEARCH RESULTS NOTE
+========================================= */
+.search-results-note {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #9ca3af;
+  margin-top: 6px;
+}
+
+/* =========================================
+   SECTION BLOCKS  (student-specific layout)
+   Gap rhythm: 24px between sections matches the
+   admin page's 24px .arp-page gap.
+========================================= */
+.srp-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.srp-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/*
+ * Section heading — padded and weighted to match admin's
+ * .arp-student-selected-header / section separator hierarchy.
+ * padding-bottom + border-bottom mirrors admin's card separator style.
+ */
+.srp-section-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.srp-section-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;               /* matches admin .res-section-title gap */
+  margin-bottom: 0;
+}
+
+.srp-section-icon {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  opacity: 0.8;
+}
+
+/*
+ * Section title — bumped from 0.875rem → 0.92rem to match the admin's
+ * .res-card-header-title scale, which anchors all card-level hierarchy.
+ * letter-spacing tightened to -0.015em to match that exact admin rule.
+ */
+.srp-section-title {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -0.015em;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/*
+ * Count pill — matches admin's .arp-student-count exactly:
+ * same font-size, font-weight, padding, and gradient.
+ */
+.srp-section-count {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+/*
+ * Description — matches admin's .arp-student-selected-meta / .arp-student-email scale.
+ */
+.srp-section-desc {
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-weight: 500;
+  line-height: 1.5;
+  max-width: 560px;
+  margin: 2px 0 0;
+}
+
+/* Section colour variants */
+.srp-section--active .srp-section-title   { color: #1d4ed8; }
+.srp-section--active .srp-section-icon    { color: #2563eb; }
+.srp-section--active .srp-section-count   { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+
+.srp-section--collected .srp-section-title { color: #15803d; }
+.srp-section--collected .srp-section-icon  { color: #16a34a; }
+.srp-section--collected .srp-section-count { background: linear-gradient(135deg, #16a34a, #15803d); }
+
+.srp-section--history .srp-section-title   { color: #b45309; }
+.srp-section--history .srp-section-icon    { color: #d97706; }
+.srp-section--history .srp-section-count   { background: linear-gradient(135deg, #d97706, #b45309); }
+
+.srp-section--closed .srp-section-title    { color: #475569; }
+.srp-section--closed .srp-section-icon     { color: #64748b; }
+.srp-section--closed .srp-section-count    { background: #64748b; }
+
+/* Walk-In Checkouts section — cyan/teal tone */
+.srp-section--walkin .srp-section-title    { color: #0e7490; }
+.srp-section--walkin .srp-section-icon     { color: #0891b2; }
+.srp-section--walkin .srp-section-count    { background: linear-gradient(135deg, #0891b2, #0e7490); }
+
+/* =========================================
+   RESERVATION LIST & CARDS
+   Pixel-identical to AdminReservationsPage
+========================================= */
+.reservation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.reservation-card {
+  width: 100%;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.055),
+    0 10px 28px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e9ecef;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.reservation-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.09),
+    0 22px 48px rgba(0, 0, 0, 0.07);
+}
+
+/* Left accent strip */
+.reservation-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  border-radius: 18px 0 0 18px;
+  background: #d1d5db;
+}
+
+.reservation-card.is-overdue::before   { background: linear-gradient(180deg, #f59e0b, #d97706); }
+.reservation-card.is-returned::before  { background: linear-gradient(180deg, #8b5cf6, #7c3aed); }
+.reservation-card.is-cancelled::before { background: #94a3b8; }
+.reservation-card.is-expired::before   { background: linear-gradient(180deg, #f97316, #ea580c); }
+.reservation-card.is-lost::before      { background: linear-gradient(180deg, #f43f5e, #e11d48); }
+.reservation-card.is-damaged::before   { background: linear-gradient(180deg, #a855f7, #9333ea); }
+
+/* Background tints for key states */
+.reservation-card.is-overdue {
+  background: linear-gradient(160deg, #fffbeb 0%, #ffffff 48%);
+  border-color: #fde68a;
+}
+.reservation-card.is-lost {
+  background: linear-gradient(160deg, #fff1f2 0%, #ffffff 48%);
+  border-color: #fecdd3;
+}
+.reservation-card.is-damaged {
+  background: linear-gradient(160deg, #faf5ff 0%, #ffffff 48%);
+  border-color: #e9d5ff;
+}
+.reservation-card.is-cancelled { opacity: 0.72; }
+.reservation-card.is-expired   { opacity: 0.84; }
+
+/* ── Card header ── */
+.res-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 18px 13px 22px;
+  border-bottom: 1px solid #f1f5f9;
+  background: #f8fafc;
+}
+
+.res-card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.res-card-header-icon {
+  font-size: 0.95rem;
+  flex-shrink: 0;
+  line-height: 1;
+  opacity: 0.75;
+}
+
+.res-card-header-title {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+.res-walkin-tag {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+/* ── 3-column detail grid ── */
+.res-sections-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 14px 18px 14px 22px;
+  background: #f8fafc;
+  align-items: stretch;
+}
+
+/* ── Section mini-card ── */
+.res-section {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 13px;
+  padding: 14px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Coloured top accent per section */
+.res-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 13px 13px 0 0;
+}
+
+.res-section--student::before     { background: linear-gradient(90deg, #3b82f6, #2563eb); }
+.res-section--book::before        { background: linear-gradient(90deg, #10b981, #059669); }
+.res-section--reservation::before { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
+
+/* ── Section title (inside card mini-panel) — matches admin exactly ── */
+.res-section-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.res-section--student   .res-section-title { color: #2563eb; }
+.res-section--book      .res-section-title { color: #059669; }
+.res-section--reservation .res-section-title { color: #7c3aed; }
+
+.res-section-icon {
+  font-size: 0.85rem;
+  line-height: 1;
+  opacity: 0.85;
+}
+
+/* ── Fields ── */
+.res-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  flex: 1;
+}
+
+.res-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.res-field-label {
+  font-size: 0.615rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #9ca3af;
+  line-height: 1.2;
+}
+
+.res-field-value {
+  font-size: 0.82rem;
+  color: #374151;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.res-field-value--strong {
+  font-weight: 700;
+  color: #111827;
+}
+
+.res-field-value--mono {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.78rem;
+  color: #374151;
+  letter-spacing: 0.02em;
+}
+
+.res-field-value--break {
+  word-break: break-all;
+  font-size: 0.78rem;
+}
+
+/* ── Due date display ── */
+.res-due-field { gap: 4px; }
+
+.res-due-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ── Inline flag chips ── */
+.res-flag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.res-flag--damaged {
+  background: #faf5ff;
+  color: #7c3aed;
+  border: 1px solid #e9d5ff;
+}
+
+.res-flag--lost {
+  background: #fff1f2;
+  color: #e11d48;
+  border: 1px solid #fecdd3;
+}
+
+/* ── Pending tag ── */
+.res-pending-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #fed7aa;
+}
+
+/* ── Pre-booking countdown timer ── */
+.res-countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  letter-spacing: 0.01em;
+}
+
+.res-countdown--urgent {
+  background: #fff7ed;
+  color: #c2410c;
+  border-color: #fed7aa;
+  animation: countdown-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes countdown-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.65; }
+}
+
+/* ── Action footer ── */
+.reservation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 18px 14px 22px;
+  border-top: 1px solid #f1f5f9;
+  background: #ffffff;
+}
+
+/* =========================================
+   STATUS BADGES
+   Pixel-identical to AdminReservationsPage
+========================================= */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  min-height: unset;
+}
+
+.status-badge.available,
+.status-badge.reserved {
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+
+.status-badge.collected {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.status-badge.overdue {
+  background: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #fed7aa;
+}
+
+.status-badge.returned {
+  background: #faf5ff;
+  color: #7c3aed;
+  border: 1px solid #ddd6fe;
+}
+
+.status-badge.unavailable,
+.status-badge.cancelled {
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.status-badge.expired {
+  background: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #fed7aa;
+}
+
+.status-badge.lost {
+  background: #fff1f2;
+  color: #e11d48;
+  border: 1px solid #fecdd3;
+}
+
+.status-badge.damaged {
+  background: #faf5ff;
+  color: #7c3aed;
+  border: 1px solid #ddd6fe;
+}
+
+/* =========================================
+   EMPTY STATES
+   Pixel-identical to AdminReservationsPage
+========================================= */
+.arp-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 52px 20px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1.5px dashed #e5e7eb;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.arp-empty-icon {
+  font-size: 2.8rem;
+  margin-bottom: 14px;
+  opacity: 0.45;
+  line-height: 1;
+}
+
+.arp-empty-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 6px;
+}
+
+.arp-empty-sub {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+  max-width: 320px;
+  line-height: 1.5;
+}
+
+/* Legacy empty-state-box (kept for ReservationList compat — mirrors admin) */
+.empty-state-box {
+  padding: 40px 20px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1.5px dashed #e5e7eb;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.empty-state-box .empty-state-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 6px;
+}
+
+.empty-state-box .empty-state-subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* =========================================
+   FINE LABELS  (student-specific)
+========================================= */
+.fine-paid-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #15803d;
+  font-weight: 800;
+  font-size: 0.84rem;
+}
+
+.fine-paid-inline {
+  color: #15803d;
+  font-weight: 700;
+  font-size: 0.84rem;
+}
+
+/* =========================================
+   MINI STAT CARDS
+   Identical to AdminReservationsPage
+========================================= */
+.mini-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.mini-stat-card {
+  appearance: none;
+  -webkit-appearance: none;
+  background: #ffffff;
+  border: 1px solid #f3f4f6;
+  border-radius: 14px;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 108px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  cursor: default;
+  pointer-events: none;
+}
+
+.mini-stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 800;
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.mini-stat-value {
+  font-size: 1.45rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #111827;
+  letter-spacing: -0.03em;
+}
+
+.mini-stat-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #6b7280;
+  line-height: 1.2;
+}
+
+.mini-stat-card.tone-blue   .mini-stat-icon { background: #eff6ff; color: #2563eb; }
+.mini-stat-card.tone-green  .mini-stat-icon { background: #f0fdf4; color: #16a34a; }
+.mini-stat-card.tone-amber  .mini-stat-icon { background: #fff7ed; color: #d97706; }
+.mini-stat-card.tone-purple .mini-stat-icon { background: #faf5ff; color: #7c3aed; }
+
+/* =========================================
+   OVERDUE TEXT
+========================================= */
+.overdue-text {
+  color: #b45309;
+  font-weight: 800;
+}
+
+/* =========================================
+   RESPONSIVE — mirrors AdminReservationsPage exactly
+========================================= */
+
+/* Tablet: keep 5-col down to 720px, then compact */
+@media (max-width: 960px) {
+  .srp-stats-grid { grid-template-columns: repeat(5, 1fr); }
+}
+
+/* Compact 5-col on small tablet — shrink card internals */
+@media (max-width: 720px) {
+  .srp-stats-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+  }
+
+  .srp-stats-grid .arp-stat-card {
+    padding: 12px 4px;
+    gap: 4px;
+  }
+
+  .srp-stats-grid .arp-stat-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+  }
+
+  .srp-stats-grid .arp-stat-count { font-size: 1.15rem; }
+  .srp-stats-grid .arp-stat-label { font-size: 0.58rem; }
+}
+
+/* Section detail grid: 3-col → 2+1 on medium screens */
+@media (max-width: 900px) {
+  .res-sections-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .res-section--reservation {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Tablet-portrait: 1-col section grid */
+@media (max-width: 720px) {
+  .res-sections-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .res-section--reservation {
+    grid-column: auto;
+  }
+}
+
+/* Small tablet / mobile — mirrors admin's @640 block exactly */
+@media (max-width: 640px) {
+  .srp-page {
+    width: calc(100% - 28px);
+    padding: 18px 0 40px;
+    gap: 16px;
+  }
+
+  .srp-stats-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+  }
+
+  /* srp-sections gap tightens to match page gap */
+  .srp-sections { gap: 16px; }
+
+  .arp-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .arp-header-left  { align-items: flex-start; }
+  .arp-back-btn     { margin-bottom: 8px; }
+  .arp-header-actions { justify-content: flex-start; }
+
+  /* Slim card header wraps on narrow screens */
+  .res-card-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .res-card-header-title { white-space: normal; }
+
+  /* Section grid stays 1-column on mobile */
+  .res-sections-grid {
+    grid-template-columns: 1fr;
+    padding: 10px 12px 10px 16px;
+    gap: 10px;
+  }
+
+  .reservation-actions {
+    flex-direction: column;
+    padding: 10px 12px 12px 16px;
+  }
+
+  .reservation-actions .primary-btn,
+  .reservation-actions .secondary-btn,
+  .reservation-actions .danger-btn,
+  .reservation-actions .danger-soft-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Section head padding removed on mobile — no custom offset needed */
+  .srp-section-head { padding: 0; }
+}
+
+/* Mobile narrow: 2-col stats — mirrors admin's @420 rule */
+@media (max-width: 420px) {
+  .srp-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .srp-stats-grid .arp-stat-card { padding: 14px 8px; }
+}

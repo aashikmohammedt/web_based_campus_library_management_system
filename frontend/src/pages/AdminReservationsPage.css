@@ -1,0 +1,1951 @@
+/* ============================================================
+   AdminReservationsPage.css  — Redesigned
+   Visual language: BooksCatalogue.css (premium, clean SaaS)
+   All classes scoped to Admin Reservations page.
+   Import inside AdminReservationsPage.jsx.
+============================================================ */
+
+/* =========================================
+   PAGE WRAPPER — matches AdminReportsPage spacing
+========================================= */
+
+/*
+ * Full-viewport page background — mirrors the Admin Dashboard's soft app
+ * background.  A fixed pseudo-element paints behind the entire viewport so
+ * the tinted canvas shows even outside the max-width column, while every
+ * white card / toolbar already defined in this file stays white for contrast.
+ * No JSX changes required.
+ */
+.arp-page {
+  width: min(100%, calc(100% - 32px));
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 28px 0 52px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  /* Establish a stacking context so children sit above the pseudo-layer */
+  position: relative;
+  isolation: isolate;
+}
+
+/* Fixed full-bleed background — same soft gradient the Dashboard inherits */
+.arp-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+
+  /*
+   * Primary source: honour whatever the app already sets on --app-bg.
+   * Fallback: a subtle blue-indigo gradient that matches the Dashboard's
+   * stat-card use of rgba(255,255,255,0.94) over a tinted surface, the
+   * --primary blue token (#1d4ed8), and the violet/blue tone palette
+   * visible in both pages.
+   */
+  background:
+    var(--app-bg,
+      linear-gradient(145deg,
+        #eff6ff 0%,
+        #f0f4ff 40%,
+        #f5f3ff 100%));
+  background-attachment: fixed;
+}
+
+/* =========================================
+   PAGE HEADER
+========================================= */
+.arp-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.arp-header-left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Back button lives inside the left column, above the title */
+.arp-back-btn {
+  margin-bottom: 10px;
+}
+
+.arp-title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -0.03em;
+  margin: 0 0 5px;
+  line-height: 1.2;
+}
+
+.arp-subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 400;
+  margin: 0;
+  line-height: 1.55;
+}
+
+.arp-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  /* Stay pinned to the top of the row regardless of left-column height */
+  align-self: flex-start;
+}
+
+.arp-results-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #374151;
+}
+
+/* =========================================
+   STATS GRID — clickable analytics cards
+========================================= */
+.arp-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+
+.arp-stat-card {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    0 8px 24px rgba(0, 0, 0, 0.05);
+  border: 1.5px solid #f3f4f6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 8px;
+  gap: 6px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.arp-stat-card:hover {
+  transform: translateY(-4px) scale(1.015);
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.1),
+    0 18px 40px rgba(0, 0, 0, 0.08);
+}
+
+.arp-stat-card:active {
+  transform: translateY(-2px) scale(1.01);
+}
+
+.arp-stat-card.active {
+  border-color: #bfdbfe;
+  background: linear-gradient(180deg, #eff6ff 0%, #fff 70%);
+  box-shadow:
+    0 6px 18px rgba(37, 99, 235, 0.14),
+    0 18px 40px rgba(37, 99, 235, 0.08);
+}
+
+.arp-stat-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  background: #f3f4f6;
+  flex-shrink: 0;
+}
+
+.arp-stat-count {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.arp-stat-label {
+  font-size: 0.67rem;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.3;
+}
+
+/* Tone variants — icon + count coloring */
+.arp-stat-card.tone-blue .arp-stat-icon {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.arp-stat-card.tone-blue .arp-stat-count {
+  color: #1d4ed8;
+}
+
+.arp-stat-card.tone-green .arp-stat-icon {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.arp-stat-card.tone-green .arp-stat-count {
+  color: #15803d;
+}
+
+.arp-stat-card.tone-amber .arp-stat-icon {
+  background: #fff7ed;
+  color: #d97706;
+}
+
+.arp-stat-card.tone-amber .arp-stat-count {
+  color: #b45309;
+}
+
+.arp-stat-card.tone-purple .arp-stat-icon {
+  background: #faf5ff;
+  color: #7c3aed;
+}
+
+.arp-stat-card.tone-purple .arp-stat-count {
+  color: #6d28d9;
+}
+
+.arp-stat-card.tone-slate .arp-stat-icon {
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.arp-stat-card.tone-slate .arp-stat-count {
+  color: #475569;
+}
+
+.arp-stat-card.tone-red .arp-stat-icon {
+  background: #fff1f2;
+  color: #e11d48;
+}
+
+.arp-stat-card.tone-red .arp-stat-count {
+  color: #be123c;
+}
+
+/* Active tone variants */
+.arp-stat-card.tone-blue.active {
+  border-color: #bfdbfe;
+}
+
+.arp-stat-card.tone-green.active {
+  border-color: #bbf7d0;
+  background: linear-gradient(180deg, #f0fdf4 0%, #fff 70%);
+}
+
+.arp-stat-card.tone-amber.active {
+  border-color: #fed7aa;
+  background: linear-gradient(180deg, #fff7ed 0%, #fff 70%);
+}
+
+.arp-stat-card.tone-purple.active {
+  border-color: #ddd6fe;
+  background: linear-gradient(180deg, #faf5ff 0%, #fff 70%);
+}
+
+/* ── Missing tone variants ── */
+.arp-stat-card.tone-orange .arp-stat-icon { background: #fff7ed; color: #ea580c; }
+.arp-stat-card.tone-orange .arp-stat-count { color: #c2410c; }
+.arp-stat-card.tone-orange.active {
+  border-color: #fed7aa;
+  background: linear-gradient(180deg, #fff7ed 0%, #fff 70%);
+}
+
+.arp-stat-card.tone-gray .arp-stat-icon { background: #f9fafb; color: #6b7280; }
+.arp-stat-card.tone-gray .arp-stat-count { color: #374151; }
+.arp-stat-card.tone-gray.active {
+  border-color: #e5e7eb;
+  background: linear-gradient(180deg, #f9fafb 0%, #fff 70%);
+}
+
+.arp-stat-card.tone-teal .arp-stat-icon { background: #f0fdfa; color: #0d9488; }
+.arp-stat-card.tone-teal .arp-stat-count { color: #0f766e; }
+.arp-stat-card.tone-teal.active {
+  border-color: #99f6e4;
+  background: linear-gradient(180deg, #f0fdfa 0%, #fff 70%);
+}
+
+/* =========================================
+   TOOLBAR — Search + Filter Chips + Date
+========================================= */
+.arp-toolbar {
+  position: relative;
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), 0 8px 20px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+/* Search bar */
+.arp-toolbar-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.arp-search-icon {
+  font-size: 0.95rem;
+  color: #9ca3af;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.arp-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 0.875rem;
+  color: #111827;
+  background: transparent;
+  font-weight: 400;
+  min-width: 0;
+}
+
+.arp-search-input::placeholder {
+  color: #9ca3af;
+}
+
+.arp-search-clear {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: #f3f4f6;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 800;
+  line-height: 1;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.arp-search-clear:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* Filter chips */
+.arp-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-bottom: 1px solid #f9fafb;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+.arp-filter-row::-webkit-scrollbar {
+  height: 8px;
+}
+
+.arp-filter-row::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 999px;
+}
+
+.arp-filter-row::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+
+.arp-filter-row::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.arp-filter-row:last-child {
+  border-bottom: none;
+}
+
+.arp-toolbar::before,
+.arp-toolbar::after {
+  content: "";
+  position: absolute;
+  top: 62px;
+  bottom: 52px;
+  width: 28px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.arp-toolbar::before {
+  left: 0;
+  background: linear-gradient(to right, #ffffff, transparent);
+}
+
+.arp-toolbar::after {
+  right: 0;
+  background: linear-gradient(to left, #ffffff, transparent);
+}
+
+.arp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+  background: #f9fafb;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.arp-chip:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  transform: translateY(-1px);
+}
+
+.arp-chip.active {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(29, 78, 216, 0.26);
+}
+
+/* Per-status active gradients */
+.arp-chip.active-prebooked {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+.arp-chip.active-collected {
+  background: linear-gradient(135deg, #16a34a, #15803d);
+}
+
+.arp-chip.active-overdue {
+  background: linear-gradient(135deg, #d97706, #b45309);
+}
+
+.arp-chip.active-returned {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+}
+
+.arp-chip.active-cancelled {
+  background: linear-gradient(135deg, #64748b, #475569);
+}
+
+.arp-chip.active-expired {
+  background: linear-gradient(135deg, #ea580c, #c2410c);
+}
+
+.arp-chip.active-lost {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+}
+
+.arp-chip.active-damaged {
+  background: linear-gradient(135deg, #9333ea, #7c3aed);
+}
+
+.arp-chip.active-student {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+}
+
+.arp-chip.active-walkin {
+  background: linear-gradient(135deg, #0891b2, #0e7490);
+}
+
+.arp-chip-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.28);
+  color: inherit;
+}
+
+.arp-chip:not(.active) .arp-chip-count {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+/* Date filter */
+.arp-date-filter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 10px 14px;
+  border-top: 1px solid #f9fafb;
+}
+
+.arp-date-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.arp-date-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.arp-date-input {
+  padding: 5px 10px;
+  border-radius: 9px;
+  border: 1.5px solid #e5e7eb;
+  background: #fafafa;
+  font-size: 0.8rem;
+  color: #111827;
+  outline: none;
+  min-height: 34px;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.arp-date-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  background: #fff;
+}
+
+/* =========================================
+   RESERVATION LIST & CARDS
+   (Used by ReservationList component)
+========================================= */
+.reservation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.reservation-card {
+  width: 100%;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.055),
+    0 10px 28px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e9ecef;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.reservation-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.09),
+    0 22px 48px rgba(0, 0, 0, 0.07);
+}
+
+/* Left accent strip */
+.reservation-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  border-radius: 18px 0 0 18px;
+  background: #d1d5db;
+}
+
+.reservation-card.is-overdue::before {
+  background: linear-gradient(180deg, #f59e0b, #d97706);
+}
+
+.reservation-card.is-returned::before {
+  background: linear-gradient(180deg, #8b5cf6, #7c3aed);
+}
+
+.reservation-card.is-cancelled::before {
+  background: #94a3b8;
+}
+
+.reservation-card.is-expired::before {
+  background: linear-gradient(180deg, #f97316, #ea580c);
+}
+
+.reservation-card.is-lost::before {
+  background: linear-gradient(180deg, #f43f5e, #e11d48);
+}
+
+.reservation-card.is-damaged::before {
+  background: linear-gradient(180deg, #a855f7, #9333ea);
+}
+
+/* Background tints for key states */
+.reservation-card.is-overdue {
+  background: linear-gradient(160deg, #fffbeb 0%, #ffffff 48%);
+  border-color: #fde68a;
+}
+
+.reservation-card.is-lost {
+  background: linear-gradient(160deg, #fff1f2 0%, #ffffff 48%);
+  border-color: #fecdd3;
+}
+
+.reservation-card.is-damaged {
+  background: linear-gradient(160deg, #faf5ff 0%, #ffffff 48%);
+  border-color: #e9d5ff;
+}
+
+.reservation-card.is-cancelled {
+  opacity: 0.72;
+}
+
+.reservation-card.is-expired {
+  opacity: 0.84;
+}
+
+/* ── Slim card header: book identifier + status badge ── */
+.res-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 18px 13px 22px;
+  border-bottom: 1px solid #f1f5f9;
+  background: #f8fafc;
+}
+
+.res-card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.res-card-header-icon {
+  font-size: 0.95rem;
+  flex-shrink: 0;
+  line-height: 1;
+  opacity: 0.75;
+}
+
+.res-card-header-title {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+.res-walkin-tag {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+/* ── 3-column section grid ── */
+.res-sections-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 14px 18px 14px 22px;
+  background: #f8fafc;
+  align-items: stretch;
+}
+
+/* ── Individual section mini-card ── */
+.res-section {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 13px;
+  padding: 14px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Coloured top-accent per section */
+.res-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 13px 13px 0 0;
+}
+
+.res-section--student::before {
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
+}
+
+.res-section--book::before {
+  background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.res-section--reservation::before {
+  background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+}
+
+/* ── Section title ── */
+.res-section-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.res-section--student .res-section-title {
+  color: #2563eb;
+}
+
+.res-section--book .res-section-title {
+  color: #059669;
+}
+
+.res-section--reservation .res-section-title {
+  color: #7c3aed;
+}
+
+.res-section-icon {
+  font-size: 0.85rem;
+  line-height: 1;
+  opacity: 0.85;
+}
+
+/* ── Fields container ── */
+.res-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  flex: 1;
+}
+
+/* ── Individual field ── */
+.res-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.res-field-label {
+  font-size: 0.615rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #9ca3af;
+  line-height: 1.2;
+}
+
+.res-field-value {
+  font-size: 0.82rem;
+  color: #374151;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.res-field-value--strong {
+  font-weight: 700;
+  color: #111827;
+}
+
+.res-field-value--mono {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.78rem;
+  color: #374151;
+  letter-spacing: 0.02em;
+}
+
+.res-field-value--break {
+  word-break: break-all;
+  font-size: 0.78rem;
+}
+
+/* ── Inline flag chips ── */
+.res-flag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.res-flag--damaged {
+  background: #faf5ff;
+  color: #7c3aed;
+  border: 1px solid #e9d5ff;
+}
+
+.res-flag--lost {
+  background: #fff1f2;
+  color: #e11d48;
+  border: 1px solid #fecdd3;
+}
+
+/* ── Pending tag ── */
+.res-pending-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #fed7aa;
+}
+
+/* ── Due date: display mode ── */
+.res-due-field {
+  gap: 4px;
+}
+
+.res-due-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ── Due date: edit mode controls ── */
+.res-due-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.res-due-edit-row input[type="date"] {
+  padding: 4px 9px;
+  border-radius: 8px;
+  border: 1.5px solid #e5e7eb;
+  background: #fafafa;
+  font-size: 0.78rem;
+  color: #111827;
+  outline: none;
+  min-height: 30px;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.res-due-edit-row input[type="date"]:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  background: #fff;
+}
+
+/* ── Edit due date button ── */
+.edit-due-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 7px;
+  font-size: 0.67rem;
+  font-weight: 700;
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease;
+  white-space: nowrap;
+}
+
+.edit-due-btn:hover {
+  background: #dbeafe;
+  border-color: #93c5fd;
+}
+
+.edit-due-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Action buttons footer ── */
+.reservation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 18px 14px 22px;
+  border-top: 1px solid #f1f5f9;
+  background: #ffffff;
+}
+
+/* =========================================
+   STATUS BADGES (inline)
+========================================= */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  min-height: unset;
+}
+
+.status-badge.available,
+.status-badge.reserved {
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+
+.status-badge.collected {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.status-badge.overdue {
+  background: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #fed7aa;
+}
+
+.status-badge.returned {
+  background: #faf5ff;
+  color: #7c3aed;
+  border: 1px solid #ddd6fe;
+}
+
+.status-badge.unavailable,
+.status-badge.cancelled {
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.status-badge.expired {
+  background: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #fed7aa;
+}
+
+.status-badge.lost {
+  background: #fff1f2;
+  color: #e11d48;
+  border: 1px solid #fecdd3;
+}
+
+.status-badge.damaged {
+  background: #faf5ff;
+  color: #7c3aed;
+  border: 1px solid #ddd6fe;
+}
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+.arp-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 52px 20px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1.5px dashed #e5e7eb;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.arp-empty-icon {
+  font-size: 2.8rem;
+  margin-bottom: 14px;
+  opacity: 0.45;
+  line-height: 1;
+}
+
+.arp-empty-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 6px;
+}
+
+.arp-empty-sub {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+  max-width: 320px;
+  line-height: 1.5;
+}
+
+/* Legacy empty-state-box (kept for ReservationList compat) */
+.empty-state-box {
+  padding: 40px 20px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1.5px dashed #e5e7eb;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.empty-state-box .empty-state-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 6px;
+}
+
+.empty-state-box .empty-state-subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* =========================================
+   STUDENT MODE LAYOUT — search-first, full-width
+========================================= */
+
+/* ── Student selection view (no student chosen yet) ── */
+.arp-student-select-view {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Student search bar — same card as .arp-toolbar but search-only */
+.arp-student-search-bar {
+  /* Suppress the chip-fade pseudo-elements sized for the full toolbar */
+  overflow: visible;
+}
+
+.arp-student-search-bar::before,
+.arp-student-search-bar::after {
+  display: none;
+}
+
+/* The .arp-toolbar-search inside already has border-bottom; remove it
+   when it's the only child so there's no orphaned divider */
+.arp-student-search-bar .arp-toolbar-search {
+  border-bottom: none;
+}
+
+/* ── Full-width student list panel ── */
+.arp-student-grid-panel {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 8px 20px rgba(0, 0, 0, 0.04);
+}
+
+/* Override list to show as a 3-column grid of items */
+.arp-student-list--full {
+  list-style: none;
+  margin: 0;
+  padding: 8px;
+  max-height: 440px;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  align-items: start;
+}
+
+.arp-student-list--full::-webkit-scrollbar {
+  width: 4px;
+}
+
+.arp-student-list--full::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.arp-student-list--full::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 999px;
+}
+
+/* Item cards in the grid */
+.arp-student-list--full .arp-student-item {
+  border-radius: 10px;
+  border: 1px solid #f3f4f6;
+  border-left: 3px solid transparent;
+  padding: 10px 12px;
+  transition: background 0.18s ease, border-color 0.18s ease,
+    box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.arp-student-list--full .arp-student-item:hover {
+  background: #f5f9ff;
+  border-color: #bfdbfe;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+  transform: translateY(-1px);
+}
+
+/* ── Student detail view (student selected, full width) ── */
+.arp-student-detail-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── "← Change Student" button ── */
+.arp-change-student-btn {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #2563eb;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease,
+    box-shadow 0.18s ease, transform 0.18s ease;
+  white-space: nowrap;
+}
+
+.arp-change-student-btn:hover {
+  background: #dbeafe;
+  border-color: #93c5fd;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.14);
+  transform: translateX(-2px);
+}
+
+.arp-change-student-btn:active {
+  transform: translateX(0);
+}
+
+/* Legacy split-layout kept for reference — no longer used */
+.arp-student-layout {
+  display: grid;
+  grid-template-columns: 256px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.arp-student-panel {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  overflow: hidden;
+  position: sticky;
+  top: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 8px 20px rgba(0, 0, 0, 0.04);
+}
+
+.arp-student-panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 11px 14px;
+  background: #f9fafb;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.arp-student-count {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.arp-student-list {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.arp-student-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.arp-student-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.arp-student-list::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 999px;
+}
+
+.arp-student-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  padding: 9px 14px;
+  background: transparent;
+  border: none;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.arp-student-item:hover {
+  background: #f9fafb;
+}
+
+.arp-student-item.active {
+  background: #eff6ff;
+  border-left-color: #2563eb;
+}
+
+.arp-student-name {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.arp-student-item.active .arp-student-name {
+  color: #2563eb;
+}
+
+.arp-student-email {
+  font-size: 0.72rem;
+  color: #9ca3af;
+  word-break: break-all;
+}
+
+.arp-student-empty {
+  padding: 20px;
+  text-align: center;
+  font-size: 0.82rem;
+  color: #9ca3af;
+}
+
+.arp-student-content {
+  min-width: 0;
+}
+
+.arp-student-selected-header {
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+  border-bottom: 2px solid #2563eb;
+}
+
+.arp-student-selected-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 3px;
+}
+
+.arp-student-selected-meta {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* =========================================
+   MINI STAT CARDS (used by ReservationList)
+========================================= */
+.mini-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.mini-stat-card {
+  appearance: none;
+  -webkit-appearance: none;
+  background: #ffffff;
+  border: 1px solid #f3f4f6;
+  border-radius: 14px;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 108px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  cursor: default;
+  pointer-events: none;
+}
+
+.mini-stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 800;
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.mini-stat-value {
+  font-size: 1.45rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #111827;
+  letter-spacing: -0.03em;
+}
+
+.mini-stat-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #6b7280;
+  line-height: 1.2;
+}
+
+.mini-stat-card.tone-blue .mini-stat-icon {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.mini-stat-card.tone-green .mini-stat-icon {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.mini-stat-card.tone-amber .mini-stat-icon {
+  background: #fff7ed;
+  color: #d97706;
+}
+
+.mini-stat-card.tone-purple .mini-stat-icon {
+  background: #faf5ff;
+  color: #7c3aed;
+}
+
+/* =========================================
+   OVERDUE TEXT
+========================================= */
+.overdue-text {
+  color: #b45309;
+  font-weight: 800;
+}
+
+/* =========================================
+   SEARCH RESULTS NOTE
+========================================= */
+.search-results-note {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #9ca3af;
+  margin-top: 6px;
+}
+
+/* =========================================
+   FINE / QR PAYMENT MODALS
+========================================= */
+.fine-modal {
+  max-width: 520px;
+}
+
+.fine-choice-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.fine-choice-btn {
+  min-height: 48px;
+  border-radius: 12px;
+  font-weight: 800;
+}
+
+/* Damaged button (secondary-btn) — keep dark text on the light hover fill */
+.fine-choice-btn.secondary-btn:hover,
+.fine-choice-btn.secondary-btn:focus-visible {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #111827;
+}
+
+/* Lost button hover fix */
+.fine-choice-btn.danger-btn {
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+  border: 2px solid #ef4444;
+  color: #ffffff;
+  box-shadow: 0 10px 24px rgba(220, 38, 38, 0.18);
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.fine-choice-btn.danger-btn:hover,
+.fine-choice-btn.danger-btn:focus-visible {
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+  border-color: #ef4444;
+  color: #ef4444 !important;
+  opacity: 1;
+  box-shadow: 0 14px 28px rgba(220, 38, 38, 0.24);
+}
+
+.fine-choice-btn.danger-btn:active {
+  transform: scale(0.98);
+}
+
+.fine-amount-pill {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 0.86rem;
+  font-weight: 800;
+  border: 1px solid #bfdbfe;
+}
+
+.qr-payment-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  border-radius: 14px;
+  background: #f9fafb;
+  border: 1px solid #f3f4f6;
+}
+
+.qr-box {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  border-radius: 18px;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, #111827 10px, transparent 10px) 0 0 / 22px 22px,
+    linear-gradient(#111827 10px, transparent 10px) 0 0 / 22px 22px,
+    #ffffff;
+  border: 10px solid #ffffff;
+  box-shadow:
+    0 18px 40px rgba(15, 23, 42, 0.12),
+    inset 0 0 0 1px rgba(15, 23, 42, 0.06);
+}
+
+.qr-grid {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 16px 16px, #111827 0 8px, transparent 8px),
+    radial-gradient(circle at calc(100% - 16px) 16px, #111827 0 8px, transparent 8px),
+    radial-gradient(circle at 16px calc(100% - 16px), #111827 0 8px, transparent 8px);
+  opacity: 0.9;
+}
+
+.qr-scan-line {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, #22c55e, transparent);
+  box-shadow: 0 0 14px rgba(34, 197, 94, 0.6);
+  animation: arpQrScanMove 1.8s linear infinite;
+}
+
+@keyframes arpQrScanMove {
+  0% {
+    top: 14px;
+    opacity: 0.9;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    top: calc(100% - 14px);
+    opacity: 0.9;
+  }
+}
+
+.qr-note {
+  font-size: 0.88rem;
+  color: #6b7280;
+  font-weight: 600;
+  text-align: center;
+}
+
+.fine-success-box {
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #15803d;
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+/* =========================================
+   WALK-IN CHECKOUT MODAL
+========================================= */
+.walkin-book-option {
+  width: 100%;
+  text-align: left;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.walkin-book-option:hover {
+  transform: translateY(-1px);
+  border-color: #93c5fd;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.1);
+}
+
+.walkin-book-option.selected {
+  border-color: rgba(37, 99, 235, 0.65);
+  background: #eff6ff;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.12);
+}
+
+.walkin-book-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.35;
+}
+
+.walkin-book-meta {
+  margin-top: 3px;
+  font-size: 0.8rem;
+  color: #6b7280;
+  line-height: 1.35;
+}
+
+.walkin-selected-card {
+  margin-top: 8px;
+  border: 1px solid #bfdbfe;
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 11px 13px;
+  color: #111827;
+}
+
+.walkin-selected-card strong {
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+.walkin-book-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 60px;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fff;
+  padding: 6px;
+  flex-shrink: 0;
+}
+
+/* =========================================
+   LEGACY COMPATIBILITY CLASSES
+   (reservation-due-row replaced by res-due-edit-row in new layout)
+========================================= */
+/* Fallback for any older references to the date input */
+.reservation-due-row input[type="date"],
+.res-due-edit-row input[type="date"] {
+  padding: 5px 10px;
+  border-radius: 9px;
+  border: 1.5px solid #e5e7eb;
+  background: #fafafa;
+  font-size: 0.82rem;
+  color: #111827;
+  outline: none;
+  min-height: 34px;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.reservation-due-row input[type="date"]:focus,
+.res-due-edit-row input[type="date"]:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  background: #fff;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+@media (max-width: 960px) {
+  .arp-stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+
+  /* 3-column section grid → 2 + 1 stacked on medium screens */
+  .res-sections-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .res-section--reservation {
+    grid-column: 1 / -1;
+    /* span full width on medium */
+  }
+
+  /* 10 cards → 5+5 → keep 5 col down to 720px */
+  .arp-stats-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  /* 10 cards → 5 per row is too cramped; switch to 5-col with smaller padding */
+  .arp-stats-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+  }
+
+  .arp-stat-card {
+    padding: 12px 4px;
+    gap: 4px;
+  }
+
+  .arp-stat-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+  }
+
+  .arp-stat-count {
+    font-size: 1.15rem;
+  }
+
+  .arp-stat-label {
+    font-size: 0.58rem;
+  }
+  .arp-student-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .arp-student-panel {
+    position: static;
+  }
+
+  /* Student grid → 2 columns on tablet */
+  .arp-student-list--full {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Section grid → 1 column on tablet-portrait */
+  .res-sections-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .res-section--reservation {
+    grid-column: auto;
+  }
+}
+
+/* ── Mobile: ≤ 640px ───────────────────────── */
+@media (max-width: 640px) {
+  .arp-page {
+    width: calc(100% - 28px);
+    padding: 18px 0 40px;
+    gap: 16px;
+  }
+
+  .arp-stats-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
+
+  /* Student grid → 1 column on mobile */
+  .arp-student-list--full {
+    grid-template-columns: 1fr;
+    max-height: 360px;
+  }
+
+  /* On mobile the header stacks: left col (back btn + title) on top,
+     actions row (Walk-In + badge) below, both full-width */
+  .arp-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .arp-header-left {
+    align-items: flex-start;
+  }
+
+  .arp-back-btn {
+    margin-bottom: 8px;
+  }
+
+  .arp-header-actions {
+    justify-content: flex-start;
+  }
+
+  /* Slim card header wraps on narrow screens */
+  .res-card-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .res-card-header-title {
+    white-space: normal;
+  }
+
+  /* Section grid stays 1-column on mobile */
+  .res-sections-grid {
+    grid-template-columns: 1fr;
+    padding: 10px 12px 10px 16px;
+    gap: 10px;
+  }
+
+  /* ── Date filter — stack vertically on mobile ── */
+  .arp-date-filter {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+
+  .arp-date-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #6b7280;
+  }
+
+  /* Each "From / To" row takes the full width */
+  .arp-date-field {
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  /* Date inputs fill the remaining space */
+  .arp-date-input {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    font-size: 0.82rem;
+    padding: 6px 10px;
+    min-height: 36px;
+    /* Prevent iOS from adding inner shadows */
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  /* Clear button — make it more tap-friendly */
+  .arp-date-filter .secondary-btn.small-btn {
+    align-self: flex-start;
+    padding: 6px 16px;
+    font-size: 0.78rem;
+  }
+
+  /* ── Action buttons — reduced width, centred row ── */
+  .reservation-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 10px 12px 12px 16px;
+    gap: 8px;
+  }
+
+  .reservation-actions .primary-btn,
+  .reservation-actions .secondary-btn,
+  .reservation-actions .danger-btn,
+  .reservation-actions .danger-soft-btn {
+    /* Shrink to content + comfortable padding; never force full width */
+    width: auto;
+    flex: 1 1 auto;
+    min-width: 100px;
+    max-width: calc(50% - 4px);
+    justify-content: center;
+    font-size: 0.8rem;
+    padding: 8px 12px;
+  }
+
+  .mini-stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .mini-stat-card {
+    min-height: 92px;
+  }
+
+  .res-due-edit-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .res-due-edit-row .primary-btn,
+  .res-due-edit-row .secondary-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Walk-In modal */
+  .walkin-modal {
+    width: calc(100vw - 16px);
+    max-height: 92vh;
+    border-radius: 18px;
+  }
+
+  .walkin-modal-header {
+    padding: 16px 14px 12px;
+  }
+
+  .walkin-modal-body {
+    padding: 14px;
+  }
+
+  .walkin-book-picker {
+    max-height: 180px;
+  }
+
+  .walkin-modal .form-actions {
+    flex-direction: column;
+  }
+
+  .walkin-modal .form-actions .primary-btn,
+  .walkin-modal .form-actions .secondary-btn {
+    width: 100%;
+  }
+}
+
+/* ── Very small phones: ≤ 420px ────────────── */
+@media (max-width: 420px) {
+  .arp-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .arp-stat-card {
+    padding: 14px 8px;
+  }
+
+  /* Date inputs — ensure they don't overflow on tiny screens */
+  .arp-date-field {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .arp-date-input {
+    width: 100%;
+  }
+
+  /* Buttons — on very small phones, each button takes its own row */
+  .reservation-actions .primary-btn,
+  .reservation-actions .secondary-btn,
+  .reservation-actions .danger-btn,
+  .reservation-actions .danger-soft-btn {
+    flex: 1 1 100%;
+    max-width: 100%;
+    font-size: 0.8rem;
+  }
+}
+
+.confirm-modal-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 2000000 !important;
+}
+
+.confirm-modal-wrap .overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  z-index: 2000001 !important;
+}
+
+.confirm-modal {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+
+  z-index: 2000002 !important;
+
+  width: min(92vw, 420px);
+  max-height: 90vh;
+
+  margin: 0 !important;
+}

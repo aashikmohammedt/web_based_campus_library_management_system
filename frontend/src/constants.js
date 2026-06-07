@@ -1,0 +1,32 @@
+export const DEPARTMENTS = [
+  "Computer Science / IT",
+  "Electronics & Communication (ECE)",
+  "Electrical & Electronics Engineering (EEE)",
+  "Mechanical Engineering",
+  "Civil Engineering",
+  "Artificial Intelligence / Data Science",
+  "Management / MBA / Commerce",
+  "English / Communication / Soft Skills",
+  "Mathematics",
+  "Physics / Basic Sciences",
+  "Chemistry / Environmental Science",
+  "General Aptitude / Placement",
+  "Others (Modern Reading / Popular Shelf)",
+];
+
+export const STUDENT_DEPARTMENT_ORDER = [
+  "Computer Science / IT",
+  "Electronics & Communication (ECE)",
+  "Electrical & Electronics Engineering (EEE)",
+  "Mechanical Engineering",
+  "Civil Engineering",
+  "Artificial Intelligence / Data Science",
+  "Management / MBA / Commerce",
+  "English / Communication / Soft Skills",
+  "Mathematics",
+  "Physics / Basic Sciences",
+  "Chemistry / Environmental Science",
+  "General Aptitude / Placement",
+  "Others (Modern Reading / Popular Shelf)",
+  "GENERAL",
+];

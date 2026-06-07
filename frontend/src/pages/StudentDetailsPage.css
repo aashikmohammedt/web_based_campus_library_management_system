@@ -1,0 +1,1220 @@
+/* ============================================================
+   StudentDetailsPage.css — Redesigned to match AdminReservationsPage
+   Visual language: premium clean SaaS, matching arp-* tokens exactly.
+   All classes scoped to sdp-* prefix. Import in StudentDetailsPage.jsx.
+============================================================ */
+
+/* =========================================
+   PAGE WRAPPER — centered column + full-bleed gradient bg
+   Mirrors arp-page exactly.
+========================================= */
+.sdp-page {
+  width: min(100%, calc(100% - 32px));
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 28px 0 52px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  /* Stacking context so ::before sits behind all children */
+  position: relative;
+  isolation: isolate;
+}
+
+/* Fixed full-bleed background — same soft blue-indigo gradient as ARP */
+.sdp-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    var(
+      --app-bg,
+      linear-gradient(145deg, #eff6ff 0%, #f0f4ff 40%, #f5f3ff 100%)
+    );
+  background-attachment: fixed;
+}
+
+/* =========================================
+   PAGE HEADER — mirrors arp-header
+========================================= */
+.sdp-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+/* Left column: back btn above title + subtitle */
+.sdp-header-left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Back button — styled like secondary-btn / arp-back-btn */
+.sdp-back-btn {
+  margin-bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 14px;
+  border-radius: 10px;
+  border: 1.5px solid #e5e7eb;
+  background: #ffffff;
+  color: #374151;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background  0.18s ease,
+    border-color 0.18s ease,
+    color        0.18s ease,
+    box-shadow   0.18s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.sdp-back-btn:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  color: #111827;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.sdp-back-btn:active {
+  transform: translateY(1px);
+}
+
+.sdp-back-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+/* Page title — mirrors arp-title */
+.sdp-title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -0.03em;
+  margin: 0 0 5px;
+  line-height: 1.2;
+}
+
+/* Page subtitle — mirrors arp-subtitle */
+.sdp-subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 400;
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* Right column: action buttons + results badge */
+.sdp-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+/* Results badge pill — mirrors arp-results-badge */
+.sdp-results-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #374151;
+}
+
+/* =========================================
+   BUTTONS — mirror primary-btn / secondary-btn / danger-btn
+========================================= */
+.sdp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border-radius: 10px;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition:
+    background    0.18s ease,
+    color         0.18s ease,
+    border-color  0.18s ease,
+    box-shadow    0.18s ease,
+    transform     0.15s ease;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.sdp-btn:active { transform: translateY(1px); }
+
+.sdp-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+}
+
+.sdp-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Primary — blue gradient matching ARP primary-btn */
+.sdp-btn--primary {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 1px 3px rgba(29, 78, 216, 0.22);
+}
+
+.sdp-btn--primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  box-shadow: 0 4px 14px rgba(29, 78, 216, 0.32);
+}
+
+/* Outline — ghost button matching secondary-btn */
+.sdp-btn--outline {
+  background: #ffffff;
+  color: #374151;
+  border-color: #e5e7eb;
+}
+
+.sdp-btn--outline:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #d1d5db;
+  color: #111827;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Danger — soft red matching danger-soft-btn */
+.sdp-btn--danger {
+  background: #ffffff;
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+
+.sdp-btn--danger:hover:not(:disabled) {
+  background: #fff1f2;
+  border-color: #f87171;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.12);
+}
+
+/* Small size */
+.sdp-btn--sm {
+  padding: 6px 12px;
+  font-size: 0.78rem;
+}
+
+/* =========================================
+   STATS GRID — 4-column layout, 8 cards = 2 rows
+========================================= */
+.sdp-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+/* Stat card — identical structure to arp-stat-card */
+.sdp-stat-card {
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    0 8px 24px rgba(0, 0, 0, 0.05);
+  border: 1.5px solid #f3f4f6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 8px;
+  gap: 6px;
+  text-align: center;
+  transition:
+    transform    0.22s ease,
+    box-shadow   0.22s ease,
+    border-color 0.22s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.sdp-stat-card:hover {
+  transform: translateY(-4px) scale(1.015);
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.1),
+    0 18px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Icon box — mirrors arp-stat-icon */
+.sdp-stat-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+  color: #374151;
+  flex-shrink: 0;
+}
+
+/* Count — mirrors arp-stat-count */
+.sdp-stat-count {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+/* Label — mirrors arp-stat-label */
+.sdp-stat-label {
+  font-size: 0.67rem;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.3;
+}
+
+/* ── Tone variants — mirrors arp tone system ── */
+.sdp-stat-card.tone-blue   .sdp-stat-icon { background: #eff6ff; color: #2563eb; }
+.sdp-stat-card.tone-blue   .sdp-stat-count { color: #1d4ed8; }
+.sdp-stat-card.tone-green  .sdp-stat-icon { background: #f0fdf4; color: #16a34a; }
+.sdp-stat-card.tone-green  .sdp-stat-count { color: #15803d; }
+.sdp-stat-card.tone-amber  .sdp-stat-icon { background: #fff7ed; color: #d97706; }
+.sdp-stat-card.tone-amber  .sdp-stat-count { color: #b45309; }
+.sdp-stat-card.tone-red    .sdp-stat-icon { background: #fff1f2; color: #e11d48; }
+.sdp-stat-card.tone-red    .sdp-stat-count { color: #be123c; }
+.sdp-stat-card.tone-purple .sdp-stat-icon { background: #faf5ff; color: #7c3aed; }
+.sdp-stat-card.tone-purple .sdp-stat-count { color: #6d28d9; }
+.sdp-stat-card.tone-teal   .sdp-stat-icon { background: #f0fdfa; color: #0d9488; }
+.sdp-stat-card.tone-teal   .sdp-stat-count { color: #0f766e; }
+.sdp-stat-card.tone-orange .sdp-stat-icon { background: #fff7ed; color: #ea580c; }
+.sdp-stat-card.tone-orange .sdp-stat-count { color: #c2410c; }
+.sdp-stat-card.tone-slate  .sdp-stat-icon { background: #f8fafc; color: #475569; }
+.sdp-stat-card.tone-slate  .sdp-stat-count { color: #334155; }
+
+/* =========================================
+   TOOLBAR — mirrors arp-toolbar (white card)
+========================================= */
+.sdp-toolbar {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.05),
+    0 8px 20px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+/* Search row — mirrors arp-toolbar-search */
+.sdp-toolbar-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.sdp-search-icon {
+  color: #9ca3af;
+  flex-shrink: 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+}
+
+.sdp-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 0.875rem;
+  color: #111827;
+  background: transparent;
+  font-weight: 400;
+  min-width: 0;
+}
+
+.sdp-search-input::placeholder { color: #9ca3af; }
+
+/* Controls row: select + expand buttons + count */
+.sdp-toolbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  flex-wrap: wrap;
+}
+
+/* Filter select — styled to match ARP input tokens */
+.sdp-filter-select {
+  padding: 6px 10px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 9px;
+  background: #f9fafb;
+  color: #374151;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-width: 148px;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.sdp-filter-select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  background: #ffffff;
+}
+
+/* Right portion: expand/collapse + count */
+.sdp-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.sdp-result-count {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #374151;
+  white-space: nowrap;
+}
+
+/* =========================================
+   STUDENT CARD LIST
+========================================= */
+.sdp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ── Student card — mirrors reservation-card ── */
+.sdp-card {
+  width: 100%;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.055),
+    0 10px 28px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e9ecef;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.sdp-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.09),
+    0 22px 48px rgba(0, 0, 0, 0.07);
+}
+
+/* Left accent strip — mirrors reservation-card::before */
+.sdp-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  border-radius: 18px 0 0 18px;
+  background: linear-gradient(180deg, #2563eb, #1d4ed8);
+}
+
+.sdp-card--active::before {
+  background: linear-gradient(180deg, #16a34a, #15803d);
+}
+
+.sdp-card--overdue::before {
+  background: linear-gradient(180deg, #f59e0b, #d97706);
+}
+
+.sdp-card--overdue {
+  background: linear-gradient(160deg, #fffbeb 0%, #ffffff 48%);
+  border-color: #fde68a;
+}
+
+.sdp-card--has-fine::before {
+  background: linear-gradient(180deg, #dc2626, #b91c1c);
+}
+
+/* Active (expanded) state */
+.sdp-card--expanded {
+  border-color: #bfdbfe;
+  box-shadow:
+    0 6px 18px rgba(37, 99, 235, 0.12),
+    0 18px 40px rgba(37, 99, 235, 0.07);
+}
+
+/* ── Card summary row (always visible) — mirrors res-card-header ── */
+.sdp-card__summary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px 14px 22px;
+  cursor: pointer;
+  user-select: none;
+  background: #f8fafc;
+  border-bottom: 1px solid transparent;
+  transition: background 0.18s ease;
+}
+
+.sdp-card--expanded .sdp-card__summary {
+  border-bottom-color: #f1f5f9;
+}
+
+.sdp-card__summary:hover {
+  background: #f1f5f9;
+}
+
+/* Avatar */
+.sdp-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.28);
+  overflow: hidden;
+}
+
+.sdp-avatar__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Name + meta in the middle */
+.sdp-card__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sdp-card__name {
+  font-size: 0.9375rem;
+  font-weight: 800;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+.sdp-card__meta {
+  font-size: 0.8rem;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Badge cluster on the right */
+.sdp-card__badges {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+/* Expand / collapse button */
+.sdp-expand-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1.5px solid #e5e7eb;
+  background: #ffffff;
+  color: #9ca3af;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    background    0.18s ease,
+    border-color  0.18s ease,
+    color         0.18s ease,
+    transform     0.26s ease;
+}
+
+.sdp-expand-btn:hover {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #2563eb;
+}
+
+.sdp-expand-btn--open {
+  transform: rotate(180deg);
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #2563eb;
+}
+
+/* =========================================
+   EXPANDED DETAIL PANEL
+   Background tint mirrors res-sections-grid area
+========================================= */
+.sdp-card__detail {
+  background: #f8fafc;
+  border-top: 1px solid #f1f5f9;
+  padding: 18px 18px 20px 22px;
+}
+
+/* ── Info fields grid ── */
+.sdp-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 8px 20px;
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  background: #ffffff;
+  border-radius: 13px;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.sdp-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+/* Label — mirrors res-field-label */
+.sdp-info-item__label {
+  font-size: 0.615rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #9ca3af;
+  line-height: 1.2;
+}
+
+/* Value — mirrors res-field-value */
+.sdp-info-item__value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #111827;
+  word-break: break-word;
+  line-height: 1.35;
+}
+
+/* =========================================
+   RESERVATION HISTORY TABLE SECTION
+========================================= */
+.sdp-reservations {
+  margin-top: 0;
+}
+
+.sdp-reservations__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+/* Section title — mirrors res-section-title */
+.sdp-reservations__title {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #7c3aed;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sdp-reservations__title::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  flex-shrink: 0;
+}
+
+/* Center align all columns except Book (1st column) */
+.sdp-table th:not(:nth-child(1)),
+.sdp-table td:not(:nth-child(1)) {
+  text-align: center;
+}
+
+/* Widen the Book column */
+.sdp-table th:nth-child(1),
+.sdp-table td:nth-child(1) {
+  min-width: 220px;
+}
+
+/* Widen the Type column */
+.sdp-table th:nth-child(3),
+.sdp-table td:nth-child(3) {
+  min-width: 180px;
+}
+
+/* Table wrapper */
+.sdp-table-wrap {
+  border-radius: 12px;
+  border: 1.5px solid #e5e7eb;
+  overflow-x: auto;
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Table — mirrors ARP table token set */
+.sdp-table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.sdp-table thead {
+  background: #f8fafc;
+}
+
+.sdp-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 0.62rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #9ca3af;
+  border-bottom: 1.5px solid #e9ecef;
+  white-space: nowrap;
+}
+
+.sdp-table td {
+  padding: 14px 16px;
+  color: #374151;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+  line-height: 1.5;
+  min-width: 110px;
+}
+
+.sdp-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.sdp-table tbody tr:hover td {
+  background: #f0f6ff;
+}
+
+/* Book name + author in first column */
+.sdp-table__item-name {
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.3;
+}
+
+.sdp-table__item-sub {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+/* ── Two-line date cell ── */
+.sdp-date-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.sdp-date-cell__date {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
+}
+
+.sdp-date-cell__time {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+/* Overdue days — plain amber text, no pill */
+.sdp-overdue-text {
+  font-weight: 700;
+  color: #b45309 !important;
+  font-size: 0.82rem;
+}
+
+/* Overdue days — amber/danger highlight (pill, kept for other uses) */
+.sdp-overdue-days {
+  font-weight: 700;
+  color: #b45309;
+  background: #fff7ed;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid #fed7aa;
+  font-size: 0.78rem;
+}
+
+/* Fine amount — red highlight */
+.sdp-fine-amount {
+  font-weight: 700;
+  color: #dc2626;
+}
+
+.sdp-fine-amount--paid {
+  color: #16a34a;
+}
+
+.sdp-fine-amount--pending {
+  color: #dc2626;
+}
+
+/* ── Detail cell — used in Checkout / Lost / Damaged columns ── */
+.sdp-detail-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 110px;
+}
+
+.sdp-detail-cell__row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.sdp-detail-cell__label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  min-width: 42px;
+}
+
+.sdp-detail-cell__value {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #374151;
+  white-space: nowrap;
+}
+
+.sdp-detail-cell__na {
+  color: #d1d5db;
+  font-size: 0.85rem;
+}
+
+/* Empty table state */
+.sdp-table-empty {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 16px;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1.5px dashed #e5e7eb;
+}
+
+/* =========================================
+   STATUS BADGES — mirrors ARP status-badge system
+========================================= */
+.sdp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  line-height: 1.5;
+}
+
+.sdp-badge--reserved {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+
+.sdp-badge--collected {
+  background: #f0fdf4;
+  color: #15803d;
+  border-color: #bbf7d0;
+}
+
+.sdp-badge--returned {
+  background: #faf5ff;
+  color: #6d28d9;
+  border-color: #ddd6fe;
+}
+
+.sdp-badge--overdue {
+  background: #fff7ed;
+  color: #c2410c;
+  border-color: #fed7aa;
+}
+
+.sdp-badge--cancelled {
+  background: #f8fafc;
+  color: #475569;
+  border-color: #e2e8f0;
+}
+
+.sdp-badge--pre-book {
+  background: #faf5ff;
+  color: #5b21b6;
+  border-color: #ddd6fe;
+}
+
+.sdp-badge--pending {
+  background: #fff7ed;
+  color: #92400e;
+  border-color: #fcd34d;
+}
+
+.sdp-badge--active {
+  background: #f0fdf4;
+  color: #065f46;
+  border-color: #a7f3d0;
+}
+
+.sdp-badge--inactive {
+  background: #f8fafc;
+  color: #64748b;
+  border-color: #e2e8f0;
+}
+
+.sdp-badge--lost-yes {
+  background: #fff1f2;
+  color: #be123c;
+  border-color: #fecdd3;
+}
+
+.sdp-badge--damaged-yes {
+  background: #fff7ed;
+  color: #c2410c;
+  border-color: #fed7aa;
+}
+
+/* Stacked badge + date cell used in Collected / Expired / Cancelled columns */
+.sdp-date-status-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.sdp-badge--expired {
+  background: #fff7ed;
+  color: #ea580c;
+  border-color: #fdba74;
+}
+
+/* Colored info-grid value variants */
+.sdp-info-item__value--collected { color: #0f766e; font-weight: 700; }
+.sdp-info-item__value--expired   { color: #c2410c; font-weight: 700; }
+.sdp-info-item__value--cancelled { color: #475569; font-weight: 700; }
+
+.sdp-badge__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* Total-reservations count pill */
+.sdp-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+}
+
+/* =========================================
+   LOADING / ERROR / EMPTY STATES
+   Mirrors arp-empty card style
+========================================= */
+.sdp-state-screen,
+.sdp-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 52px 20px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1.5px dashed #e5e7eb;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  gap: 10px;
+}
+
+.sdp-empty-icon,
+.sdp-state-icon {
+  opacity: 0.4;
+  margin-bottom: 4px;
+  line-height: 1;
+}
+
+.sdp-empty-title,
+.sdp-state-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0;
+}
+
+.sdp-empty-sub,
+.sdp-state-text {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+  max-width: 340px;
+  line-height: 1.5;
+}
+
+/* Spinner — matches ARP's loading animation */
+.sdp-spinner {
+  width: 38px;
+  height: 38px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: sdpSpin 0.75s linear infinite;
+  margin-bottom: 4px;
+}
+
+@keyframes sdpSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* =========================================
+   ANIMATIONS — preserved from original
+========================================= */
+.sdp-fade-in {
+  animation: sdpFadeIn 0.22s ease both;
+}
+
+.sdp-slide-down {
+  animation: sdpSlideDown 0.24s ease both;
+}
+
+@keyframes sdpFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes sdpSlideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   RESPONSIVE — mirrors ARP breakpoints
+========================================= */
+
+/* 5-column → 4-column on medium (already 4-col, keep as-is) */
+@media (max-width: 900px) {
+  .sdp-stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .sdp-card__summary {
+    padding: 12px 14px 12px 20px;
+  }
+}
+
+/* 720px — student card info wraps */
+@media (max-width: 720px) {
+  .sdp-info-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 640px — mobile layout */
+@media (max-width: 640px) {
+  .sdp-page {
+    width: calc(100% - 28px);
+    padding: 18px 0 40px;
+    gap: 16px;
+  }
+
+  /* Header stacks vertically */
+  .sdp-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .sdp-header-left { align-items: flex-start; }
+  .sdp-back-btn    { margin-bottom: 8px; }
+
+  .sdp-header-actions { justify-content: flex-start; }
+
+  /* Stats → 4-column */
+  .sdp-stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  /* Toolbar controls stack */
+  .sdp-toolbar-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+
+  .sdp-filter-select { width: 100%; min-width: unset; }
+
+  .sdp-toolbar-right {
+    margin-left: 0;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  /* Card summary wraps on very narrow screens */
+  .sdp-card__summary {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px 14px 12px 20px;
+  }
+
+  .sdp-card__badges { flex-wrap: wrap; }
+
+  /* Detail panel */
+  .sdp-card__detail { padding: 14px 14px 16px 18px; }
+
+  /* Info grid → 2 columns */
+  .sdp-info-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 14px;
+  }
+}
+
+@media (max-width: 420px) {
+  .sdp-stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .sdp-info-grid  { grid-template-columns: 1fr; }
+}
+
+/* =========================================
+   PRINT
+========================================= */
+@media print {
+  .sdp-page { background: #fff; padding: 0; }
+  .sdp-page::before { display: none; }
+
+  .sdp-header-actions,
+  .sdp-toolbar,
+  .sdp-expand-btn,
+  .sdp-back-btn { display: none !important; }
+
+  .sdp-card,
+  .sdp-stat-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+
+  .sdp-table-wrap { overflow: visible; }
+  .sdp-table { min-width: unset; }
+}
+/* =========================================
+   PAGINATION — same as Books Catalogue
+========================================= */
+
+.catalogue-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 1rem;
+}
+
+.catalogue-pagination-btn {
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  color: #111827;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.catalogue-pagination-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.catalogue-pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.catalogue-pagination-btn--active {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 6px 16px rgba(29, 78, 216, 0.2);
+}

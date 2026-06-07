@@ -1,0 +1,1899 @@
+.catalogue-container {
+  width: min(100%, calc(100% - 32px));
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 28px 0 52px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-x: hidden;
+}
+
+/* ── Toolbar (sort controls) ─────────────────────────────── */
+.catalogue-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.catalogue-sort-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.catalogue-sort-select {
+  padding: 6px 26px 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 8px center;
+  -webkit-appearance: none;
+  appearance: none;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  min-width: 140px;
+}
+
+.catalogue-sort-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CATALOGUE GRID
+═══════════════════════════════════════════════════════════ */
+.catalogue-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BOOK CARD — matches New Arrivals card dimensions exactly
+═══════════════════════════════════════════════════════════ */
+.book-card {
+  height: 100%;
+  min-height: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid rgba(148,163,184,0.16);
+  box-shadow: 0 10px 28px rgba(15,23,42,0.06);
+  transition: transform .2s ease, box-shadow .2s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.book-card-clickable {
+  cursor: pointer;
+}
+
+.book-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(15,23,42,0.1);
+}
+
+/* ── Cover area — proportions match New Arrivals exactly ── */
+.book-cover-thumb {
+  aspect-ratio: 3 / 4;
+  width: 100%;
+  max-height: 340px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #111827;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+
+/* Cards WITHOUT an image: restore the dark-gradient placeholder.
+   Scoped to placeholder only — image covers use white bg set per-variant. */
+.book-cover-thumb--placeholder {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%) !important;
+}
+
+.book-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* List view: show full cover without cropping */
+.book-card--list > .book-cover-thumb .book-cover-img {
+  object-fit: contain;
+}
+
+.book-cover-initial {
+  font-size: 68px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.15);
+  user-select: none;
+  line-height: 1;
+}
+
+/* ── Info section — padded area below the cover ── */
+.book-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  height: 100%;
+  flex: 1;
+}
+
+.book-card-title {
+  font-size: 0.82rem;
+  line-height: 1.4;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  min-height: calc(0.82rem * 1.4 * 3); /* reserves space for 3 lines — keeps grid cards height-balanced */
+
+  /* Grid view: full wrap, no truncation, no ellipsis */
+  display: block;
+  overflow: visible;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  flex-shrink: 0;
+}
+
+.book-card-author {
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: #4b5563;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+}
+
+.book-card-edition {
+  font-size: 0.84rem;
+  color: #9ca3af;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+}
+
+/* ─── EDITION LINE — slightly dimmer than author ────────── */
+.book-edition-text {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+/* ─── FEATURED FOOTER — wrapper for copies label ─────────── */
+.featured-footer {
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 0.2rem;
+}
+
+/* ─── COPIES LABEL — sits in featured-footer ────────────────── */
+.copies-label {
+  font-size: 11px;
+  color: #9ca3af;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+/* ─── COPIES STATUS TEXT — plain muted, no badge ────────── */
+.copies-status {
+  font-size: 0.67rem;
+  font-weight: 500;
+  margin-top: 0.12rem;
+  line-height: 1;
+}
+
+.copies-status--available {
+  color: #6b7280;
+}
+
+.copies-status--limited {
+  color: #92400e;
+}
+
+.copies-status--unavailable {
+  color: #9ca3af;
+}
+
+/* ── Grid-view admin actions — inside card, below cover ─── */
+.admin-card-actions-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  flex-shrink: 0;
+}
+
+.admin-card-actions-grid .admin-action-btn {
+  width: 26px;
+  height: 26px;
+}
+
+/* ─── SHARED ADMIN BUTTON BASE ───────────────────────────── */
+.admin-action-btn {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s ease, border-color 0.2s ease,
+              transform 0.15s ease;
+  will-change: transform;
+  pointer-events: auto;
+}
+
+.admin-action-btn:hover  { transform: scale(1.1);  }
+.admin-action-btn:active { transform: scale(0.95); }
+
+/* ─── EDIT VARIANT ───────────────────────────────────────── */
+.edit-btn {
+  background: #f0f4ff;
+  border-color: #c5d3f5;
+  color: #3a5bbf;
+}
+.edit-btn:hover {
+  background: #dce6ff;
+  border-color: #9db2ef;
+}
+
+/* ─── DELETE VARIANT ─────────────────────────────────────── */
+.delete-btn {
+  background: rgba(220, 53, 69, 0.25);
+  border-color: rgba(220, 53, 69, 0.4);
+}
+.delete-btn:hover {
+  background: rgba(220, 53, 69, 0.52);
+  border-color: rgba(220, 53, 69, 0.6);
+}
+
+/* ─── INCREASE VARIANT ───────────────────────────────────── */
+.increase-btn {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #16a34a;
+}
+.increase-btn:hover {
+  background: #dcfce7;
+  border-color: #86efac;
+}
+
+/* ─── DECREASE VARIANT ───────────────────────────────────── */
+.decrease-btn {
+  background: #fff7ed;
+  border-color: #fed7aa;
+  color: #c2410c;
+}
+.decrease-btn:hover {
+  background: #ffedd5;
+  border-color: #fdba74;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PRE-BOOK BUTTON (student)
+   Full-width strip at the bottom of the info area.
+   Two visual states: available (solid) / unavailable (ghost).
+═══════════════════════════════════════════════════════════ */
+
+.borrow-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1.5px solid transparent;
+  font-size: 0.82rem;
+  font-weight: 700;
+  width: 100%;
+  margin-top: auto;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  flex-shrink: 0;
+
+  cursor: pointer;
+  transition:
+    background   0.2s ease,
+    border-color 0.2s ease,
+    box-shadow   0.2s ease,
+    transform    0.15s ease;
+  will-change: transform;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.borrow-btn__icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.borrow-btn:active {
+  transform: scale(0.97);
+}
+
+/* ── Available state — solid blue fill ───────────────────── */
+.borrow-btn--available {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  color: #ffffff;
+}
+
+.borrow-btn--available:hover {
+  background: #1e40af;
+  border-color: #1e40af;
+  box-shadow: 0 4px 14px rgba(29, 78, 216, 0.35);
+}
+
+/* ── Pre-Book / Unavailable state — ghost ────────────────── */
+.borrow-btn--prebook {
+  background: transparent;
+  border-color: #cbd0d8;
+  color: #667085;
+}
+
+.borrow-btn--prebook:hover {
+  background: #f5f7fa;
+  border-color: #9aa4b2;
+  color: #3d4a5c;
+}
+
+.borrow-btn__icon--left {
+  opacity: 0.75;
+}
+
+/* ─── MODAL ─────────────────────────────────────────────── */
+.modal-container {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px 32px;
+  min-width: 340px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+  position: relative;
+  animation: slideUp 0.25s ease;
+}
+
+.modal-content h3 {
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+  line-height: 1;
+  transition: color 0.2s;
+}
+.modal-close:hover { color: #111; }
+
+/* ─── CONFIRM BOX ───────────────────────────────────────── */
+.confirm-box {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  background: rgba(0, 0, 0, 0.45);
+  animation: fadeIn 0.15s ease;
+}
+
+.confirm-box-inner {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px 28px;
+  max-width: 360px;
+  width: 90%;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.2s ease;
+  text-align: center;
+}
+
+.confirm-box-inner p {
+  margin: 0 0 20px;
+  font-size: 15px;
+  color: #333;
+  line-height: 1.5;
+}
+
+.confirm-box-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.confirm-box-actions button {
+  padding: 8px 22px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+.confirm-box-actions button:active { transform: scale(0.97); }
+
+.confirm-yes         { background: #007bff; color: #fff;  }
+.confirm-yes:hover   { background: #0056d2;               }
+.confirm-no          { background: #f0f0f0; color: #333;  }
+.confirm-no:hover    { background: #e0e0e0;               }
+
+/* ─── EMPTY STATE ───────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #888;
+}
+
+/* ─── ANIMATIONS ────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   EDIT BOOK MODAL  (admin)
+═══════════════════════════════════════════════════════════ */
+
+/* ── Overlay ─────────────────────────────────────────────── */
+.edit-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 12, 30, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+  padding: 1rem;
+  animation: editFadeIn 0.18s ease both;
+}
+
+@keyframes editFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Modal card ──────────────────────────────────────────── */
+.edit-modal-content {
+  background: #ffffff;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 580px;
+  max-height: 92vh;
+  overflow-y: auto;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.18),
+    0 32px 80px rgba(0, 0, 0, 0.16);
+  animation: editSlideUp 0.22s cubic-bezier(0.34, 1.28, 0.64, 1) both;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.edit-modal-content::-webkit-scrollbar { display: none; }
+
+@keyframes editSlideUp {
+  from { opacity: 0; transform: translateY(28px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+.edit-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem 0;
+}
+
+.edit-modal-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.edit-modal-header-icon {
+  color: #2563eb;
+  flex-shrink: 0;
+}
+
+.edit-modal-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.edit-modal-close {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: #f3f4f6;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.16s ease, color 0.16s ease;
+  flex-shrink: 0;
+  padding: 0;
+}
+.edit-modal-close:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* ── Body ────────────────────────────────────────────────── */
+.edit-modal-body {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.25rem 1.5rem;
+}
+
+/* ── Cover preview column ────────────────────────────────── */
+.edit-cover-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  flex-shrink: 0;
+}
+
+.edit-cover-preview {
+  width: 120px;
+  height: 164px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 2px solid #e5e7eb;
+}
+
+.edit-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.edit-cover-initial {
+  font-size: 52px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.18);
+  user-select: none;
+  line-height: 1;
+}
+
+.edit-upload-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0.4rem 0.85rem;
+  background: #f0f4ff;
+  border: 1.5px solid #c7d7fd;
+  border-radius: 8px;
+  color: #2563eb;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.16s ease, border-color 0.16s ease;
+  white-space: nowrap;
+}
+.edit-upload-btn:hover {
+  background: #dce8ff;
+  border-color: #93c5fd;
+}
+
+.edit-upload-hint {
+  font-size: 0.68rem;
+  color: #9ca3af;
+  margin: 0;
+  text-align: center;
+}
+
+/* ── Form fields column ──────────────────────────────────── */
+.edit-form-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  min-width: 0;
+}
+
+.edit-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.edit-field-group--small {
+  max-width: 110px;
+  flex-shrink: 0;
+}
+
+.edit-field-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.edit-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #374151;
+  letter-spacing: 0.01em;
+}
+
+.edit-required {
+  color: #dc2626;
+  margin-left: 2px;
+}
+
+.edit-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 9px;
+  font-size: 0.82rem;
+  color: #111827;
+  background: #fafafa;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  box-sizing: border-box;
+}
+.edit-input:focus {
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+.edit-input::placeholder {
+  color: #c1c8d4;
+}
+
+.edit-input[type="number"]::-webkit-inner-spin-button,
+.edit-input[type="number"]::-webkit-outer-spin-button { opacity: 1; }
+
+/* ── Footer ──────────────────────────────────────────────── */
+.edit-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 0 1.5rem 1.5rem;
+  border-top: 1px solid #f3f4f6;
+  padding-top: 1.1rem;
+  margin-top: 0.25rem;
+}
+
+.edit-btn-cancel {
+  padding: 0.52rem 1.3rem;
+  border-radius: 10px;
+  border: 1.5px solid #e5e7eb;
+  background: #ffffff;
+  color: #374151;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.16s ease, border-color 0.16s ease;
+}
+.edit-btn-cancel:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.edit-btn-save {
+  padding: 0.52rem 1.5rem;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: opacity 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+}
+.edit-btn-save:hover:not(:disabled) {
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+.edit-btn-save:active:not(:disabled) {
+  transform: translateY(0);
+  opacity: 1;
+}
+.edit-btn-save:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PRE-BOOK DETAIL MODAL — info section
+   (reuses all .edit-modal-* chrome; only the body content
+    classes are unique to this view)
+═══════════════════════════════════════════════════════════ */
+
+/* Right-side info column inside the detail modal body */
+.prebook-detail-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.prebook-detail-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.prebook-detail-author {
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: #4b5563;
+  margin: 0;
+}
+
+.prebook-detail-edition {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin: 0;
+}
+
+/* Metadata grid — mirrors .na-modal-meta style */
+.prebook-detail-meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.75rem;
+  row-gap: 0.32rem;
+  margin: 0.55rem 0 0;
+  font-size: 0.78rem;
+}
+
+.prebook-detail-meta dt {
+  font-weight: 600;
+  color: #6b7280;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.prebook-detail-meta dd {
+  margin: 0;
+  color: #111827;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Confirmation prompt callout */
+.prebook-confirm-prompt {
+  font-size: 0.8rem;
+  color: #374151;
+  margin: 0.75rem 0 0;
+  padding: 0.65rem 0.85rem;
+  background: #eff6ff;
+  border-left: 3px solid #2563eb;
+  border-radius: 0 8px 8px 0;
+  line-height: 1.5;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 560px) {
+  .edit-modal-body {
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 1.1rem;
+  }
+
+  .edit-cover-section {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .edit-cover-preview {
+    width: 90px;
+    height: 124px;
+  }
+
+  .edit-field-row {
+    flex-direction: column;
+  }
+
+  .edit-field-group--small {
+    max-width: 100%;
+  }
+
+  .edit-modal-footer {
+    flex-direction: column-reverse;
+  }
+
+  .edit-btn-cancel,
+  .edit-btn-save {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ── Responsive grid breakpoints handled by main media queries below ── */
+
+/* ≤ 600px  — allow long metadata strings to wrap */
+@media (max-width: 600px) {
+  .book-card-meta-value {
+    white-space: normal;
+    word-break: break-word;
+  }
+  .book-card-info--list .book-card-author {
+    white-space: normal;
+    word-break: break-word;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BOOK DETAIL CONFIRM MODAL  (student — New Arrivals pre-book)
+   Reuses .confirm-modal-wrap / .overlay from the shared modal
+   system; only the inner card and its children are unique here.
+═══════════════════════════════════════════════════════════ */
+
+.book-detail-modal {
+  width: min(600px, 92vw);
+  padding: 0;
+  border-radius: 18px;
+  overflow: hidden;
+  animation: editSlideUp 0.22s cubic-bezier(0.34, 1.28, 0.64, 1) both;
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+.bdm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px 16px;
+}
+
+.bdm-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bdm-header-icon {
+  color: #2563eb;
+}
+
+.bdm-header-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: -0.01em;
+}
+
+.bdm-close-btn {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: #f3f4f6;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.16s ease, color 0.16s ease;
+}
+.bdm-close-btn:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* ── Body ────────────────────────────────────────────────── */
+.bdm-body {
+  display: flex;
+  gap: 24px;
+  padding: 4px 22px 20px;
+}
+
+/* Cover column */
+.bdm-cover-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.bdm-cover {
+  width: 130px;
+  height: 178px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  border: 2px solid #e5e7eb;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+.bdm-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  background: #ffffff;
+}
+
+.bdm-cover-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Availability badge */
+.bdm-badge {
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.bdm-badge--available {
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1.5px solid #bfdbfe;
+}
+.bdm-badge--unavailable {
+  background: #fff7ed;
+  color: #c2410c;
+  border: 1.5px solid #fed7aa;
+}
+
+/* Info column */
+.bdm-info-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bdm-book-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.3;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.bdm-book-author {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #4b5563;
+  margin: 0 0 6px;
+}
+
+/* Metadata table */
+.bdm-meta-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 2px;
+}
+.bdm-meta-table tr + tr td {
+  padding-top: 5px;
+}
+.bdm-meta-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #9ca3af;
+  padding-right: 20px;
+  white-space: nowrap;
+  vertical-align: top;
+}
+.bdm-meta-value {
+  font-size: 0.78rem;
+  color: #374151;
+  font-weight: 500;
+}
+
+/* Callout / prompt box */
+.bdm-callout {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: #eff6ff;
+  border-left: 3px solid #2563eb;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.82rem;
+  color: #1e40af;
+  line-height: 1.5;
+}
+
+/* ── Divider ─────────────────────────────────────────────── */
+.bdm-divider {
+  height: 1px;
+  background: #f3f4f6;
+  margin: 0 22px;
+}
+
+/* ── Actions ─────────────────────────────────────────────── */
+.bdm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 22px 18px;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .bdm-body {
+    flex-direction: column;
+    align-items: center;
+    padding: 4px 16px 16px;
+  }
+  .bdm-info-col {
+    width: 100%;
+  }
+  .bdm-actions {
+    flex-direction: column-reverse;
+    padding: 12px 16px 16px;
+  }
+  .bdm-actions .secondary-btn,
+  .bdm-actions .primary-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+/* ═══════════════════════════════════════════════════════════
+   PAGINATION — same styles as AdminReportsPage
+   (catalogue-pagination / catalogue-pagination-btn)
+═══════════════════════════════════════════════════════════ */
+.catalogue-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 1rem;
+}
+
+.catalogue-pagination-btn {
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform var(--transition),
+    background var(--transition),
+    box-shadow var(--transition);
+}
+
+.catalogue-pagination-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: #fff;
+  box-shadow: var(--shadow-md);
+}
+
+.catalogue-pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.catalogue-pagination-btn--active {
+  background: linear-gradient(135deg, var(--primary), #2563eb);
+  color: var(--white);
+  border-color: transparent;
+  box-shadow: 0 6px 16px rgba(29, 78, 216, 0.2);
+}
+
+/* ── Responsive pagination handled by main breakpoints ─── */
+/* =========================================
+   BORROW BUTTON — blocked/unavailable state
+   (book already pre-booked or checked out by this student)
+   Applied when the backend returns 400 with a duplicate-reservation
+   message; mirrors the visual treatment of a truly out-of-stock book.
+========================================= */
+.borrow-btn--unavailable {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.7;
+
+  /*
+   * Prevent all pointer interaction so double-clicks and rapid taps
+   * cannot race past the frontend guard and fire another API request.
+   */
+  pointer-events: none;
+}
+
+/* Keep appearance frozen on hover — no lift, no colour shift */
+.borrow-btn--unavailable:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  color: #9ca3af;
+  transform: none;
+  box-shadow: none;
+}
+
+/*
+ * Override the base .borrow-btn:active { transform: scale(0.97) } rule.
+ * Without this the button still gives tactile feedback on tap/click,
+ * implying it is interactive when it is not.
+ */
+.borrow-btn--unavailable:active {
+  transform: none;
+}
+
+/*
+ * Suppress the focus ring — a disabled/unavailable button should not
+ * look focusable. Keyboard users are already blocked by pointer-events
+ * and the disabled HTML attribute set by the component.
+ */
+.borrow-btn--unavailable:focus,
+.borrow-btn--unavailable:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+/* ═══════════════════════════════════════════════════════════
+   VIEW TOGGLE  — grid / list switcher in the toolbar
+═══════════════════════════════════════════════════════════ */
+
+/* Pill wrapper that holds the two icon buttons */
+.catalogue-view-toggle {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  flex-shrink: 0;
+}
+
+/* Individual grid / list icon button */
+.catalogue-view-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #9ca3af;
+  cursor: pointer;
+  transition:
+    background   0.18s ease,
+    color        0.18s ease,
+    border-color 0.18s ease,
+    box-shadow   0.18s ease;
+  padding: 0;
+  line-height: 1;
+}
+
+.catalogue-view-btn:hover:not(.catalogue-view-btn--active) {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+/* Selected state — matches the blue accent used across the file */
+.catalogue-view-btn--active {
+  background: #ffffff;
+  color: #1d4ed8;
+  border-color: #c7d7fd;
+  box-shadow: 0 1px 4px rgba(29, 78, 216, 0.12);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LIST VIEW CONTAINER
+   Single-column; replaces .catalogue-grid when list is active
+═══════════════════════════════════════════════════════════ */
+
+.catalogue-list-view {
+  display: flex !important;
+  flex-direction: column;
+  grid-template-columns: unset !important;
+  gap: 0.65rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BOOK CARD — LIST VARIANT  (.book-card--list)
+   Full-width horizontal card; shares border-radius, shadow and
+   transition values with the existing .book-card grid card so
+   both variants feel visually consistent.
+═══════════════════════════════════════════════════════════ */
+
+.book-card--list {
+  display: grid;
+  /* Column 1: fixed cover/actions column | Column 2: flexible info area */
+  grid-template-columns: 140px minmax(0, 1fr);
+  /* Row 1: cover fills remaining height | Row 2: admin action strip auto */
+  grid-template-rows: 1fr auto;
+  align-items: stretch;
+  /* Height is content-driven — cover aspect-ratio drives card height */
+  border-radius: 20px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.book-card--list:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.1),
+    0 18px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* ── Cover: fills the left column height — no forced aspect-ratio on desktop ── */
+.book-card--list > .book-cover-thumb {
+  grid-column: 1;
+  grid-row: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 160px;
+  max-height: none;
+  /* No fixed aspect-ratio — height is driven by info column content on desktop */
+  aspect-ratio: unset;
+  border-radius: 0;
+  /* White bg so any letterbox gap from contain blends into the card — no dark filler */
+  background: #ffffff;
+  overflow: hidden;
+}
+
+/* Cover image: object-fit cover on desktop gives a seamless edge-to-edge fill.
+   No dark frame visible around the image. */
+.book-card--list .book-cover-img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+}
+
+/* ── Admin action strip: bottom of left column, below the cover ── */
+.book-card--list > .admin-card-actions-grid {
+  grid-column: 1;
+  grid-row: 2;
+  width: 100%;
+  padding: 7px 6px;
+  gap: 6px;
+  /* Fits all 4 buttons in one row inside 140px column */
+}
+.book-card--list > .admin-card-actions-grid .admin-action-btn {
+  width: 24px;
+  height: 24px;
+}
+
+/* ── Info area: spans the full right column (both rows) ── */
+.book-card--list > .book-card-info {
+  grid-column: 2;
+  grid-row: 1 / -1;
+}
+
+/* ── Inline metadata row (department, course, location) ── */
+.book-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+/* Each key/value pair inside .book-card-meta */
+.book-card-meta-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.book-card-meta-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.book-card-meta-value {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #374151;
+  min-width: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE — list view mobile adjustments
+   Collapses to a compact stacked layout below 480 px.
+   Grid breakpoints are untouched.
+═══════════════════════════════════════════════════════════ */
+
+/* ≤ 1024px tablet — 3 columns, 21 books per page */
+@media (max-width: 1024px) {
+
+  .catalogue-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TABLET LIST-VIEW ONLY — 769px to 1024px
+   Enlarges the cover column, info padding, and button sizes.
+   Grid view, mobile layouts, and desktop are untouched.
+═══════════════════════════════════════════════════════════ */
+@media (min-width: 769px) and (max-width: 1024px) {
+
+  /* Wider cover column — more visual weight on tablet */
+  .book-card--list {
+    grid-template-columns: 200px minmax(0, 1fr);
+  }
+
+  /* Taller cover to match the wider column */
+  .book-card--list > .book-cover-thumb {
+    min-height: 230px;
+  }
+
+  /* More breathing room in the info area */
+  .book-card-info--list {
+    padding: 18px 20px;
+    gap: 4px;
+  }
+
+  /* Slightly more space between top-group items */
+  .book-card-info-top {
+    gap: 3px;
+  }
+
+  /* Title — a touch more margin below */
+  .book-card-info--list .book-card-title {
+    margin-bottom: 4px;
+  }
+
+  /* Metadata rows — slightly more spread */
+  .book-card-info--list .book-card-meta {
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .book-card-info--list .book-card-meta-label {
+    font-size: 0.74rem;
+  }
+
+  .book-card-info--list .book-card-meta-value {
+    font-size: 0.82rem;
+  }
+
+  /* Copies label + status — slightly larger on tablet */
+  .book-card-info--list .book-card-info-bottom .copies-label {
+    font-size: 12px;
+  }
+
+  .book-card-info--list .book-card-info-bottom .copies-status {
+    font-size: 0.76rem;
+  }
+
+  /* Borrow button — wider and taller on tablet */
+  .book-card--list .borrow-btn {
+    min-height: 38px;
+    min-width: 124px;
+    font-size: 0.82rem;
+  }
+
+  /* Admin action strip — more padding and gap inside the wider 200px column */
+  .book-card--list > .admin-card-actions-grid {
+    padding: 9px 8px;
+    gap: 8px;
+  }
+
+  /* Admin action buttons — larger hit targets on tablet */
+  .book-card--list > .admin-card-actions-grid .admin-action-btn {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .catalogue-container {
+    width: calc(100% - 24px);
+  }
+
+  /* ── List card: true 40% cover | 60% info — no gutters so cover is visually dominant ── */
+  .book-card--list {
+    grid-template-columns: 40% minmax(0, 1fr);
+    /* Remove any outer gap that shrinks the visible cover column */
+    column-gap: 0;
+  }
+
+  /* Cover extends full height of card, edge-to-edge, absolutely no padding */
+  .book-card--list > .book-cover-thumb {
+    width: 100%;
+    height: 100%;
+    min-height: 155px;
+    aspect-ratio: unset;
+    padding: 0;
+    margin: 0;
+    /* White bg — any contain letterbox area invisible against card bg */
+    background: #ffffff;
+  }
+
+  /* object-fit: contain — full cover visible, no cropping for any aspect ratio.
+     White bg behind the image — no dark/blue filler visible. */
+  .book-card--list > .book-cover-thumb .book-cover-img {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+  }
+
+  .book-card-info--list {
+    padding: 10px 11px;
+  }
+
+  .borrow-btn {
+    min-height: 36px;
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .catalogue-container {
+    width: calc(100% - 28px);
+    padding: 16px 0 36px;
+  }
+
+  .catalogue-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  /* ── List card: true 40/60 on small mobile — zero column-gap so cover is full width ── */
+  .book-card--list {
+    grid-template-columns: 40% minmax(0, 1fr);
+    column-gap: 0;
+  }
+
+  /* Cover extends edge-to-edge — no padding, no margin, no aspect-ratio constraint */
+  .book-card--list > .book-cover-thumb {
+    width: 100%;
+    height: 100%;
+    min-height: 140px;
+    aspect-ratio: unset;
+    padding: 0;
+    margin: 0;
+    /* White bg — letterbox areas from contain are invisible against card */
+    background: #ffffff;
+  }
+
+  /* object-fit: contain — entire cover visible regardless of aspect ratio.
+     White bg hides any letterbox area — no dark/blue filler visible. */
+  .book-card--list > .book-cover-thumb .book-cover-img {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+  }
+
+  /* Switch admin buttons to a 2×2 grid so they fit comfortably in the 40% column */
+  .book-card--list > .admin-card-actions-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    padding: 4px;
+    gap: 3px;
+  }
+  .book-card--list > .admin-card-actions-grid .admin-action-btn {
+    width: 20px;
+    height: 20px;
+    margin: 0 auto;
+  }
+
+  /* Tighter right-column padding — pulls content closer to cover, reduces visual gap */
+  .book-card-info--list {
+    padding: 8px 9px 8px 7px;
+  }
+
+  /* Grid-view title at mobile: smaller font, still fully visible — no truncation */
+  .book-card-title {
+    font-size: 0.75rem;
+    line-height: 1.35;
+    min-height: unset;
+    display: block;
+    overflow: visible;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  /* List-view title ≤ 480px — fully visible, no truncation */
+  .book-card-info--list .book-card-title {
+    font-size: 0.79rem;
+    line-height: 1.38;
+    min-height: unset;
+    display: block;
+    overflow: visible;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    margin-bottom: 3px;
+  }
+
+  .book-card-info--list .book-card-author {
+    font-size: 0.67rem;
+    line-height: 1.3;
+    display: block;
+    overflow: visible;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    text-overflow: unset;
+  }
+
+  .book-card-info--list .book-card-edition {
+    font-size: 0.62rem;
+    line-height: 1.3;
+    display: block;
+    overflow: visible;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    text-overflow: unset;
+  }
+
+  /* Metadata rows — scoped to list view, tighter on mobile */
+  .book-card-info--list .book-card-meta {
+    gap: 3px;
+    margin-top: 4px;
+  }
+
+  .book-card-info--list .book-card-meta-label {
+    font-size: 0.60rem;
+  }
+
+  .book-card-info--list .book-card-meta-value {
+    font-size: 0.65rem;
+    display: block;
+    overflow: visible;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    text-overflow: unset;
+  }
+
+  /* Copies count + status — compact, scoped to list view */
+  .book-card-info--list .book-card-info-bottom {
+    padding-top: 5px;
+  }
+
+  .book-card-info--list .book-card-info-bottom .copies-label {
+    font-size: 10px;
+  }
+
+  .book-card-info--list .book-card-info-bottom .copies-status {
+    font-size: 0.60rem;
+    margin-top: 2px;
+  }
+
+  /* Pre-book button: compact and aligned in 60% right column */
+  .book-card--list .borrow-btn {
+    width: 100%;
+    min-width: unset;
+    max-width: unset;
+    min-height: 30px;
+    font-size: 0.67rem;
+    padding: 0 8px;
+    margin-top: 5px;
+  }
+
+  .borrow-btn {
+    min-height: 34px;
+    font-size: 0.74rem;
+    padding: 0 10px;
+  }
+}
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE — list view ≤ 360px (very small phones)
+   All values derived from the 480px block, scaled further.
+═══════════════════════════════════════════════════════════ */
+@media (max-width: 360px) {
+
+  .book-card--list {
+    grid-template-columns: 40% minmax(0, 1fr);
+    column-gap: 0;
+  }
+
+  /* Slightly taller cover on very small screens so it stays visually dominant */
+  .book-card--list > .book-cover-thumb {
+    min-height: 130px;
+    /* White bg so letterbox from contain is invisible against card background */
+    background: #ffffff;
+  }
+
+  /* object-fit: contain — no cropping, full cover shown on tiny screens.
+     White bg — no dark/blue filler behind the image. */
+  .book-card--list > .book-cover-thumb .book-cover-img {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+  }
+
+  .book-card-info--list {
+    padding: 7px 8px 7px 6px;
+  }
+
+  /* List-view title ≤ 360px — fully visible, no truncation */
+  .book-card-info--list .book-card-title {
+    font-size: 0.73rem;
+    line-height: 1.35;
+    min-height: unset;
+    display: block;
+    overflow: visible;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    margin-bottom: 2px;
+  }
+
+  .book-card-info--list .book-card-author {
+    font-size: 0.65rem;
+    display: block;
+    overflow: visible;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    text-overflow: unset;
+  }
+
+  .book-card-info--list .book-card-edition {
+    font-size: 0.62rem;
+    display: block;
+    overflow: visible;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    text-overflow: unset;
+  }
+
+  /* Metadata: scoped to list view on tiny screens */
+  .book-card-info--list .book-card-meta-label {
+    font-size: 0.60rem;
+  }
+
+  .book-card-info--list .book-card-meta-value {
+    font-size: 0.65rem;
+    display: block;
+    overflow: visible;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    text-overflow: unset;
+  }
+
+  .book-card-info--list .book-card-info-bottom {
+    padding-top: 4px;
+  }
+
+  /* Copies: slightly larger than previous 9px/0.56rem — still compact */
+  .book-card-info--list .book-card-info-bottom .copies-label {
+    font-size: 10px;
+  }
+
+  .book-card-info--list .book-card-info-bottom .copies-status {
+    font-size: 0.60rem;
+  }
+
+  /* Pre-book button — ultra compact */
+  .book-card--list .borrow-btn {
+    min-height: 26px;
+    font-size: 0.60rem;
+    padding: 0 6px;
+    margin-top: 4px;
+  }
+
+  /* Admin 2×2 buttons stay manageable in the 40% column */
+  .book-card--list > .admin-card-actions-grid .admin-action-btn {
+    width: 21px;
+    height: 21px;
+    font-size: 10px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BOOK CARD INFO — LIST VARIANT
+   Two-group layout: top (text) + bottom (copies + button).
+   Cover height drives card height; info fills the right column.
+═══════════════════════════════════════════════════════════ */
+
+.book-card-info--list {
+  display: flex;
+  flex-direction: column;
+  /* Natural top-to-bottom flow; bottom group anchored via margin-top: auto */
+  justify-content: flex-start;
+  gap: 0;
+  padding: 14px 16px;
+  min-width: 0;
+  overflow: visible;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* ── Top group: title + author + edition + metadata ── */
+.book-card-info-top {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+/* ── Bottom group: copies count + status + pre-book button ── */
+.book-card-info-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  flex-shrink: 0;
+  padding-top: 8px;
+  margin-top: auto;
+}
+
+.book-card-info-bottom .featured-footer {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.book-card-info-bottom .copies-status {
+  margin-top: 3px;
+  font-size: 0.72rem;
+}
+
+/* ── Wrapper for card + below-card admin actions ── */
+.book-card-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;                          /* fill the stretched grid cell */
+}
+
+.book-card-info--list .book-card-meta-value {
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LIST VIEW TYPOGRAPHY — desktop baseline (> 768px)
+   No truncation anywhere. Cover height drives card height;
+   text wraps freely across all elements.
+═══════════════════════════════════════════════════════════ */
+.book-card-info--list .book-card-title {
+  font-size: 1.0rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #111827;
+  margin: 0 0 2px;
+  min-height: unset;
+  display: block;
+  overflow: visible;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  padding-bottom: 2px;
+  flex-shrink: 0;
+}
+.book-card-info--list .book-card-author {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #4b5563;
+  margin: 0 0 1px;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  overflow: visible;
+  text-overflow: unset;
+  flex-shrink: 0;
+}
+.book-card-info--list .book-card-edition {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin: 0;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  overflow: visible;
+  text-overflow: unset;
+  flex-shrink: 0;
+}
+
+/* ── Pre-Book button in list view ────────────────────────── */
+.book-card--list .borrow-btn {
+  width: fit-content;
+  min-width: 108px;
+  max-width: 140px;
+  padding: 0 12px;
+  min-height: 34px;
+  font-size: 0.79rem;
+  align-self: flex-start;
+  margin-top: 8px;
+}

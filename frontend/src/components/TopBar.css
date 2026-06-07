@@ -1,0 +1,780 @@
+/* =========================================
+   TOP BAR
+========================================= */
+
+/* ── TopBar wrapper (sticky context for header + quick-actions) ── */
+.topbar-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  margin-left: 0;
+  padding-top: env(safe-area-inset-top, 0);
+  background: transparent;
+  overflow-x: clip;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+
+/* ── TopBar shell ─────────────────────────── */
+.topbar {
+  /* Sticky scroll is handled by .topbar-wrapper; no duplicate needed here */
+  position: relative;
+  z-index: 20;
+  display: grid;
+  grid-template-columns:
+  minmax(0, 1fr)
+  minmax(280px, 520px)
+  auto;
+  grid-template-areas: "copy search actions";
+  align-items: center;
+  gap: 0 12px;
+  padding: 14px 20px;
+  min-height: 72px;
+  margin: 8px;
+  width: calc(100% - 16px);
+  border-radius: 8px;
+  background: #0f1b2d;
+  backdrop-filter: blur(16px);
+  /* Crisp 1 px separator + a two-layer shadow:
+     - inner layer: tight, dark — anchors the bar to the surface
+     - outer layer: wider, softer — lifts it without going glassy */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.35),
+    0 4px 16px rgba(0, 0, 0, 0.22);
+  overflow: visible;
+}
+
+/* ── Left: copy ───────────────────────────── */
+.topbar-copy {
+  grid-area: copy;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  align-self: center;
+  overflow: hidden;
+  padding-right: 4px;
+  /* gap instead of padding-top/bottom — lets align-self:center work cleanly
+     without the copy block being nudged off the search bar's visual midline */
+  gap: 2px;
+}
+
+.topbar-eyebrow {
+  display: inline-block;
+  margin-bottom: 2px;
+  color: #93c5fd;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.topbar .muted {
+  color: #94a3b8;
+  margin: 2px 0 0;
+  font-size: 0.82rem;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+.topbar h1 {
+  color: #f8fafc;
+  min-width: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+/* ── Center: Amazon-style search bar ─────── */
+.topbar-search {
+  grid-area: search;
+  display: flex;
+  align-items: center;
+  height: 44px;
+  /* up from 40px — better touch target & visual weight */
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1.5px solid rgba(203, 213, 225, 0.45);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.10);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  width: min(100%, 520px);
+  flex-shrink: 0;
+  min-height: unset;
+  margin-bottom: 0;
+}
+
+.topbar-search:focus-within {
+  border-color: #2563eb;
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.18),
+    0 1px 2px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.10);
+  background: #ffffff;
+}
+
+/* Spacer that keeps the layout balanced when there is no search bar */
+.topbar-search-spacer {
+  flex: 1 1 420px;
+}
+
+/* Left dropdown wrapper — positions the select + arrow together */
+.topbar-filter-wrap {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+  border-radius: 8px 0 0 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Left dropdown */
+.topbar-search-filter {
+  height: 100%;
+  padding: 0 36px 0 14px;
+  /* right clears the arrow; left adds breathing room */
+  border: none;
+  border-right: 1px solid rgba(148, 163, 184, 0.20);
+  border-radius: 0;
+  background: rgba(241, 245, 249, 0.92);
+  color: #1e293b;
+  font-size: 0.8rem;
+  font-weight: 700;
+  width: auto;
+  min-width: 118px;
+  appearance: none;
+  -webkit-appearance: none;
+  flex-shrink: 0;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  line-height: 1;
+  /* prevent select text from riding high/low */
+}
+
+.topbar-search-filter:hover {
+  background-color: rgba(226, 232, 240, 0.95);
+}
+
+.topbar-search-filter:focus {
+  background-color: rgba(219, 234, 254, 0.95);
+  box-shadow: none;
+  border-color: rgba(148, 163, 184, 0.25);
+}
+
+/* Custom arrow button — sits on top of the select, right side */
+.topbar-filter-arrow {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 0;
+  background: rgba(219, 234, 254, 0.55);
+  border-left: 1px solid rgba(148, 163, 184, 0.16);
+  color: #3b82f6;
+  pointer-events: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+/* Arrow SVG rotation is driven by inline style in JSX */
+.topbar-filter-arrow svg {
+  display: block;
+}
+
+/* Square highlight on hover */
+.topbar-filter-wrap:hover .topbar-filter-arrow {
+  background: rgba(29, 78, 216, 0.12);
+  color: var(--primary);
+}
+
+/* Deeper highlight when focused/open */
+.topbar-filter-wrap:has(.topbar-search-filter:focus) .topbar-filter-arrow {
+  background: rgba(29, 78, 216, 0.18);
+  color: var(--primary);
+}
+
+/* Visual separator between dropdown and input */
+.topbar-search-sep {
+  width: 1px;
+  height: 28px;
+  /* scaled up from 26px to suit 44px bar */
+  background: rgba(148, 163, 184, 0.22);
+  flex-shrink: 0;
+  align-self: center;
+}
+
+/* Input wrapper (holds input + clear button) */
+.topbar-search-input-wrap {
+  flex: 1;
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+/* Center input */
+.topbar-search-input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 0;
+  padding: 0 42px 0 14px;
+  /* right clears the × button with room to breathe */
+  background: transparent;
+  color: #0f172a;
+  font-size: 0.875rem;
+  font-weight: 500;
+  box-shadow: none;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.topbar-search-input::placeholder {
+  color: #a0aec0;
+  font-weight: 400;
+  font-style: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar-search-input:focus {
+  border-color: transparent;
+  box-shadow: none;
+  background: transparent;
+}
+
+/* Clear (×) button inside input */
+/* AFTER */
+.topbar-search-clear {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(148, 163, 184, 0.20);
+  color: #64748b;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.12s ease, color 0.12s ease, transform 0.12s ease;
+}
+
+.topbar-search-clear:hover {
+  background: rgba(220, 38, 38, 0.11);
+  color: #dc2626;
+  transform: translateY(-50%) scale(1.05);
+}
+
+/* Right search button */
+.topbar-search-btn {
+  height: 100%;
+  padding: 0 18px;
+  border-radius: 0 8px 8px 0;
+  /* inner radius: bar is 10px, border eats 1.5px each side */
+  background: linear-gradient(150deg, #3b82f6 0%, #2563eb 100%);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+
+.topbar-search-btn:hover {
+  filter: brightness(1.08) saturate(1.1);
+  transform: none;
+}
+
+.topbar-search-btn:active {
+  transform: scale(0.985);
+  filter: brightness(0.94);
+}
+
+.topbar-search-btn:focus-visible,
+.topbar-search-clear:focus-visible,
+.topbar-avatar-btn:focus-visible,
+.profile-icon-btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px rgba(147, 197, 253, 0.7),
+    0 0 0 5px rgba(37, 99, 235, 0.18);
+}
+
+/* ── Right: actions ───────────────────────── */
+.topbar-actions {
+  grid-area: actions;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+  min-width: max-content;
+}
+
+.profile-icon-btn,
+.topbar-avatar-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  transition:
+    opacity 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease;
+}
+
+.profile-icon-btn {
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  color: var(--white);
+  font-weight: 800;
+  font-size: 0.95rem;
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.22);
+}
+
+.topbar-avatar-btn {
+  border: none;
+  cursor: pointer;
+}
+
+.topbar-avatar-btn:hover,
+.profile-icon-btn:hover {
+  opacity: 0.92;
+  transform: translateY(-0.5px);
+}
+
+.topbar-avatar-btn--photo {
+  background: transparent;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.34),
+    0 4px 10px rgba(0, 0, 0, 0.18);
+}
+
+.topbar-avatar-btn--initials {
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.92rem;
+  box-shadow:
+    0 6px 16px rgba(37, 99, 235, 0.22),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.topbar-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+/* =========================================
+   ADMIN QUICK ACTIONS (inline inside topbar)
+========================================= */
+
+/* Two-row topbar when quick actions are present */
+.topbar--with-qa {
+  grid-template-areas:
+    "copy search actions"
+    "qa   qa     qa";
+  /* Explicit row sizing: first row fills naturally, QA row is sized to its content */
+  grid-template-rows: auto auto;
+  /* Consistent gap between the two rows — was 0, which caused cramping */
+  row-gap: 6px;
+  /* Match the base topbar's top padding so the first row doesn't shift
+     when QA mounts/unmounts. Bottom padding now accounts for the QA row. */
+  padding-bottom: 10px;
+}
+
+/* ── Individual quick-action button ── */
+/* AFTER */
+.topbar-qa-btn {
+  /* Uniform sizing — 30px height hits a practical touch-target floor */
+  height: 1.875rem;
+  /* was 1.5rem (24px) → now ~30px */
+  padding: 0 0.75rem;
+  /* was 0.5rem — more horizontal breathing room */
+  min-width: unset;
+
+  /* Typography */
+  font-size: 0.8rem;
+  /* was 0.78rem — one notch more readable */
+  font-weight: 600;
+  font-family: inherit;
+  letter-spacing: 0.02em;
+  /* slightly more airy at this weight */
+  white-space: nowrap;
+  text-align: center;
+  line-height: 1;
+  /* prevents text riding vertically off-center */
+
+  /* Shape */
+  border-radius: 5px;
+  /* was 4px — softened to match topbar radius language */
+  border: 1px solid transparent;
+  /* reserve border space so hover doesn't shift layout */
+
+  /* Colours — transparent, text only */
+  background-color: transparent;
+  color: var(--qa-btn-color, rgba(255, 255, 255, 0.75));
+
+  /* Behaviour */
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+  /* smooth focus ring entry */
+
+  flex: 0 0 auto;
+}
+
+/* AFTER */
+.topbar-qa-btn:hover {
+  background-color: rgba(255, 255, 255, 0.10);
+  border-color: rgba(255, 255, 255, 0.12);
+  /* ghost border surfaces on hover — adds depth */
+  color: #ffffff;
+}
+
+/* AFTER */
+.topbar-qa-btn:active {
+  background-color: var(--qa-btn-active-bg, rgba(255, 255, 255, 0.18));
+  border-color: rgba(255, 255, 255, 0.16);
+  transform: scale(0.985);
+  /* was 0.97 — barely perceptible dip suits small btns */
+  transition-duration: 0.08s;
+}
+
+.topbar-qa-btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px rgba(147, 197, 253, 0.55),
+    0 0 0 5px rgba(37, 99, 235, 0.18);
+  border-color: rgba(147, 197, 253, 0.35);
+  color: #ffffff;
+}
+
+/* ── Badge on a quick-action button (e.g. walk-in count) ── */
+/* AFTER */
+.topbar-qa-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.35rem;
+  min-width: 1.2rem;
+  height: 1.2rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+  vertical-align: middle;
+  background-color: var(--qa-badge-bg, #e05252);
+  color: var(--qa-badge-color, #ffffff);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.14);
+}
+
+/* AFTER */
+.topbar-quick-actions-inner {
+  grid-area: qa;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  max-width: 100%;
+  justify-content: flex-end;
+  /* row-gap on .topbar--with-qa now owns the top separation — no margin needed */
+  margin-top: 0;
+  /* topbar--with-qa's padding-bottom now owns bottom clearance */
+  padding-bottom: 0;
+  /* Explicit min-height keeps the QA row from collapsing to different sizes
+     depending on badge presence, preventing vertical jitter */
+  min-height: fit-content;
+  flex-wrap: nowrap;
+  /* single row — no layout-height instability */
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  /* scroll horizontally if buttons overflow */
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  /* momentum scroll on iOS */
+  scrollbar-width: none;
+  /* Firefox — hide scrollbar, keep scroll */
+  -ms-overflow-style: none;
+  /* IE/Edge legacy */
+}
+
+.topbar-quick-actions-inner::-webkit-scrollbar {
+  display: none;
+  /* Chrome/Safari — hidden but scrollable */
+}
+
+/* =========================================
+   RESPONSIVE — TOP BAR
+========================================= */
+
+/* Tablet: shrink title & subtitle, keep search */
+@media (max-width: 1024px) {
+  .topbar {
+    column-gap: 14px;
+    /* was 8px — the abrupt 14→8 jump caused ~12px height shift; 12px is smooth */
+    padding: 12px 16px;
+  }
+
+  .topbar-search {
+    width: 340px;
+    height: 44px;
+  }
+
+  .topbar h1 {
+    font-size: 1.15rem;
+  }
+
+  .topbar-eyebrow {
+    font-size: 0.72rem;
+  }
+
+  .topbar .muted {
+    font-size: 0.82rem;
+  }
+}
+
+/* Tablet landscape */
+@media (max-width: 900px) {
+  .topbar {
+    /* 12px consistent with the 1024px step — no more oscillation between steps */
+    padding: 12px 16px;
+    border-radius: 0;
+  }
+
+  .topbar-search {
+    width: 300px;
+    height: 44px;
+  }
+}
+
+/* Tablet portrait: 2-row layout */
+@media (max-width: 768px) {
+  .topbar {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "copy actions"
+      "search search";
+    column-gap: 12px;
+    row-gap: 8px;
+    /* Symmetric padding — was "12px 16px 10px", the 2px asymmetry
+       caused the bar to sit slightly taller than expected */
+    padding: 12px 16px;
+  }
+
+  .topbar-search {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .topbar--with-qa {
+    grid-template-areas:
+      "copy actions"
+      "search search"
+      "qa qa";
+    /* row-gap carries from base .topbar--with-qa (6px); no override needed */
+    padding-bottom: 10px;
+  }
+
+  .topbar h1 {
+    font-size: 1.15rem;
+  }
+
+  .topbar-eyebrow {
+    font-size: 0.72rem;
+  }
+
+  .topbar .muted {
+    display: none;
+  }
+}
+
+/* Mobile: compact */
+@media (max-width: 640px) {
+  .topbar {
+    padding: 11px 14px;
+    column-gap: 10px;
+    row-gap: 10px;
+    margin-top: 0;
+  }
+
+  .topbar-copy {
+    min-width: 0;
+    max-width: 100%;
+    gap: 1px;
+  }
+
+  .topbar h1 {
+    font-size: 1.05rem;
+    line-height: 1.15;
+  }
+
+  .topbar-eyebrow {
+    display: none;
+  }
+
+  .topbar .muted {
+    display: none;
+  }
+
+  .topbar-actions {
+    gap: 8px;
+  }
+
+  /* width handled naturally by grid layout */
+}
+
+/* AFTER */
+@media (max-width: 480px) {
+  .topbar {
+    padding: 10px 12px;
+    gap: 8px;
+    border-radius: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .topbar-copy {
+    min-width: 0;
+  }
+
+  .topbar h1 {
+    font-size: 1.05rem;
+    line-height: 1.1;
+  }
+
+  .topbar-eyebrow,
+  .topbar .muted {
+    display: none;
+  }
+
+  .topbar-actions {
+    gap: 8px;
+  }
+
+  .topbar-search {
+    width: 100%;
+    min-width: 0;
+    height: 42px;
+    border-radius: 8px;
+  }
+
+  .topbar-search-filter {
+    min-width: 64px;
+    max-width: 74px;
+    font-size: 0.74rem;
+    padding: 0 24px 0 7px;
+  }
+
+  .topbar-filter-arrow {
+    width: 24px;
+  }
+
+  .topbar-search-input {
+    font-size: 0.8rem;
+    padding: 0 30px 0 9px;
+    min-width: 0;
+  }
+
+  .topbar-search-btn {
+    padding: 0 12px;
+  }
+
+  .topbar-avatar-btn,
+  .profile-icon-btn {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* AFTER */
+@media (max-width: 420px) {
+  .topbar {
+    padding: 10px 12px;
+  }
+
+  .topbar h1 {
+    font-size: 1.05rem;
+  }
+
+  .topbar-eyebrow {
+    font-size: 0.72rem;
+  }
+
+  .profile-icon-btn,
+  .topbar-avatar-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .topbar-search {
+    height: 42px;
+    /* held at 42px — consistent with 480px floor */
+  }
+
+  .topbar-search-filter {
+    min-width: 58px;
+    max-width: 66px;
+    font-size: 0.7rem;
+    padding: 0 18px 0 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .topbar-filter-arrow {
+    width: 20px;
+  }
+
+  .topbar-search-input {
+    font-size: 0.78rem;
+    padding: 0 26px 0 7px;
+  }
+
+  .topbar-search-btn {
+    padding: 0 10px;
+  }
+  .topbar-quick-actions-inner {
+    justify-content: flex-start;
+    padding-bottom: 2px;
+  }
+}

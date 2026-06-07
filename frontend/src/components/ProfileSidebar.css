@@ -1,0 +1,602 @@
+/* =========================================
+   OVERLAY / SIDEBAR
+========================================= */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(2, 6, 23, 0.46);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+
+.overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.profile-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 140;
+  width: min(520px, 100%);
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(14px);
+  border-left: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: -18px 0 50px rgba(15, 23, 42, 0.12);
+  transform: translateX(100%);
+  transition: transform 0.32s ease;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 18px;
+}
+
+.profile-sidebar.open {
+  transform: translateX(0);
+}
+
+.side-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.98);
+  padding-bottom: 8px;
+}
+
+.side-panel-header h3 {
+  font-size: 1.18rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.profile-sidebar-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.profile-user-box {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(239, 246, 255, 0.92), rgba(248, 250, 252, 0.95));
+  border: 1px solid rgba(191, 219, 254, 0.6);
+}
+
+.profile-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.profile-avatar-large {
+  width: 76px;
+  height: 76px;
+  border-radius: 20px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  color: #ffffff;
+  font-size: 1.3rem;
+  font-weight: 800;
+  box-shadow: 0 14px 28px rgba(37, 99, 235, 0.18);
+}
+
+.profile-avatar-large img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-image-edit-wrap {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+}
+
+.profile-edit-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 0.9rem;
+  font-weight: 800;
+  box-shadow: 0 10px 20px rgba(29, 78, 216, 0.2);
+}
+
+.profile-edit-icon-btn:hover {
+  opacity: 0.92;
+}
+
+.profile-user-meta {
+  min-width: 0;
+  flex: 1;
+}
+
+.profile-user-box h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.profile-user-box p {
+  font-size: 0.88rem;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+  word-break: break-word;
+}
+
+.profile-info-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.profile-section {
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(248, 250, 252, 0.82);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.profile-section-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.profile-detail-list {
+  display: grid;
+  gap: 8px;
+}
+
+.profile-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.profile-detail-item span {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.profile-detail-item strong {
+  font-size: 0.92rem;
+  color: var(--text);
+  word-break: break-word;
+}
+
+.profile-image-actions,
+.profile-edit-actions,
+.profile-sidebar-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* =========================================
+   PROFILE PANEL (TopBar inline sidebar)
+   Slides in from the right when the avatar
+   button is clicked. Matches the existing
+   .profile-sidebar design system.
+========================================= */
+
+/* Backdrop — same dimming as .overlay */
+.profile-panel-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 130;
+  background: rgba(2, 6, 23, 0.46);
+  animation: profilePanelFadeIn 0.22s ease forwards;
+}
+
+@keyframes profilePanelFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Panel — mirrors .profile-sidebar exactly */
+.profile-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 140;
+  width: min(400px, 100%);
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(14px);
+  border-left: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: -18px 0 50px rgba(15, 23, 42, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  padding: 24px 20px 28px;
+  animation: profilePanelSlideIn 0.28s ease forwards;
+}
+
+@keyframes profilePanelSlideIn {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* ── Close button ── */
+.profile-panel__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgba(148, 163, 184, 0.12);
+  color: var(--text-soft);
+  font-size: 1.2rem;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+  flex-shrink: 0;
+  align-self: flex-end;
+}
+
+.profile-panel__close:hover {
+  background: rgba(220, 38, 38, 0.1);
+  color: var(--danger);
+}
+
+/* ── Avatar ── */
+.profile-panel__avatar-wrap {
+  margin-top: 16px;
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+
+.profile-panel__avatar-img {
+  width: 76px;
+  height: 76px;
+  border-radius: 20px;
+  object-fit: cover;
+  display: block;
+  box-shadow: 0 14px 28px rgba(37, 99, 235, 0.18);
+}
+
+.profile-panel__avatar-initials {
+  width: 76px;
+  height: 76px;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  color: #ffffff;
+  font-size: 1.3rem;
+  font-weight: 800;
+  box-shadow: 0 14px 28px rgba(37, 99, 235, 0.18);
+}
+
+/* ── Name + email ── */
+.profile-panel__name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text);
+  text-align: center;
+  margin-bottom: 4px;
+  word-break: break-word;
+}
+
+.profile-panel__email {
+  font-size: 0.88rem;
+  color: var(--text-soft);
+  text-align: center;
+  word-break: break-all;
+  margin-bottom: 18px;
+}
+
+/* ── Student ID block ── */
+.profile-panel__student-id-wrap {
+  width: 100%;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(248, 250, 252, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profile-panel__field-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* View mode row: value + edit icon side by side */
+.profile-panel__id-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.profile-panel__field-value {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text);
+  word-break: break-word;
+}
+
+.profile-panel__field-value em {
+  font-style: normal;
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+.profile-panel__edit-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: rgba(29, 78, 216, 0.07);
+  color: var(--primary);
+  border: 1px solid rgba(29, 78, 216, 0.14);
+  display: grid;
+  place-items: center;
+  font-size: 0.92rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.profile-panel__edit-icon:hover {
+  background: rgba(29, 78, 216, 0.13);
+  border-color: rgba(29, 78, 216, 0.28);
+}
+
+/* Edit mode */
+.profile-panel__edit-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile-panel__input {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(255, 255, 255, 0.97);
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.profile-panel__input:focus {
+  border-color: rgba(37, 99, 235, 0.45);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
+}
+
+.profile-panel__input:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.profile-panel__edit-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Save / Cancel buttons */
+.profile-panel__btn {
+  flex: 1;
+  min-height: 36px;
+  border-radius: 10px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: opacity var(--transition), transform var(--transition);
+}
+
+.profile-panel__btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.profile-panel__btn--primary {
+  background: linear-gradient(135deg, var(--primary), #2563eb);
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(29, 78, 216, 0.18);
+}
+
+.profile-panel__btn--primary:hover:not(:disabled) {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.profile-panel__btn--ghost {
+  background: rgba(148, 163, 184, 0.12);
+  color: var(--text-soft);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.profile-panel__btn--ghost:hover:not(:disabled) {
+  background: rgba(148, 163, 184, 0.2);
+  transform: translateY(-1px);
+}
+
+/* =========================================
+   RESPONSIVE — profile sidebar & panel
+========================================= */
+@media (max-width: 900px) {
+  .profile-sidebar {
+    width: min(560px, 100%);
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-sidebar {
+    width: 100%;
+  }
+
+  .profile-user-box {
+    align-items: flex-start;
+  }
+
+  .profile-avatar-large {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    font-size: 1.1rem;
+  }
+
+  .profile-edit-icon-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    font-size: 0.84rem;
+  }
+
+  .profile-section {
+    padding: 12px;
+    border-radius: 16px;
+  }
+
+  .profile-detail-item {
+    padding: 10px;
+    border-radius: 12px;
+  }
+
+  .profile-sidebar-footer,
+  .profile-image-actions,
+  .profile-edit-actions {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mobile-drawer-header h3,
+  .side-panel-header h3 {
+    font-size: 1.05rem;
+  }
+
+  .mobile-drawer-profile-card,
+  .profile-user-box {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .mobile-drawer-avatar,
+  .profile-avatar-large {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    font-size: 1rem;
+  }
+
+  .profile-edit-icon-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    font-size: 0.82rem;
+  }
+
+  .profile-panel {
+    width: 100%;
+    padding: 20px 16px 24px;
+  }
+}
+
+@media (max-width: 420px) {
+  .mobile-drawer-profile-card,
+  .profile-user-box {
+    align-items: flex-start;
+  }
+
+  .mobile-drawer-avatar,
+  .profile-avatar-large {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+  }
+
+  .mobile-drawer-profile-info h4,
+  .profile-user-box h4 {
+    font-size: 0.9rem;
+  }
+
+  .mobile-drawer-profile-info p,
+  .profile-user-box p {
+    font-size: 0.78rem;
+  }
+
+  .profile-edit-icon-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    font-size: 0.82rem;
+  }
+}
+
+.profile-sidebar-footer .full-btn,
+.profile-edit-actions .full-btn,
+.profile-image-actions .full-btn {
+  width: fit-content !important;
+  min-width: 160px;
+  max-width: 220px;
+  padding-left: 22px;
+  padding-right: 22px;
+  align-self: center;
+  justify-content: center;
+}
+.profile-edit-actions,
+.profile-sidebar-footer,
+.profile-image-actions {
+  align-items: center;
+}
+@media (max-width: 640px) {
+  .profile-sidebar-footer .full-btn,
+  .profile-edit-actions .full-btn,
+  .profile-image-actions .full-btn {
+    min-width: 145px;
+    max-width: 190px;
+  }
+}

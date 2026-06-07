@@ -1,0 +1,467 @@
+/* =========================================
+   ADMIN DASHBOARD PAGE
+   Admin-specific styles only:
+   page shell, stats, quick-summary strip,
+   quick-action grid, admin icon buttons,
+   topbar wrapper + admin quick-action strip.
+========================================= */
+
+/* ── Page shell ───────────────────────── */
+.page-shell {
+  width: min(100%, calc(100% - 32px));
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 0 42px;
+}
+
+/* =========================================
+   ADMIN STATS GRID
+========================================= */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 320px));
+  gap: 12px;
+  margin-bottom: 18px;
+  justify-content: start;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: var(--shadow-sm);
+  width: 100%;
+}
+
+.stat-card h3 {
+  font-size: 1.28rem;
+  line-height: 1;
+  margin-bottom: 3px;
+  font-weight: 800;
+}
+
+.stat-card p {
+  color: var(--text-soft);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.stat-icon,
+.mini-stat-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-size: 0.85rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.tone-blue .stat-icon,
+.tone-blue .mini-stat-icon {
+  background: rgba(37, 99, 235, 0.12);
+  color: #1d4ed8;
+}
+
+.tone-green .stat-icon,
+.tone-green .mini-stat-icon {
+  background: rgba(22, 163, 74, 0.12);
+  color: #15803d;
+}
+
+.tone-violet .stat-icon,
+.tone-violet .mini-stat-icon {
+  background: rgba(124, 58, 237, 0.12);
+  color: #6d28d9;
+}
+
+/* =========================================
+   QUICK SUMMARY STRIP
+========================================= */
+.quick-summary-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.quick-summary-pill,
+.quick-summary-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  box-shadow: var(--shadow-sm);
+}
+
+.quick-summary-pill strong,
+.quick-summary-item strong {
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.quick-summary-pill span,
+.quick-summary-item span {
+  font-size: 0.82rem;
+  color: var(--text-soft);
+  font-weight: 700;
+}
+
+/* =========================================
+   ADMIN QUICK ACTIONS
+========================================= */
+.admin-quick-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.admin-quick-action-btn {
+  width: 100%;
+  min-height: 72px;
+  padding: 14px 18px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 14px;
+  text-align: left;
+  white-space: normal;
+  line-height: 1.35;
+}
+
+.admin-quick-action-icon {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 1.1rem;
+}
+
+.admin-quick-action-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.admin-quick-action-title {
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.admin-quick-action-text {
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.35;
+  opacity: 0.92;
+}
+
+.admin-quick-action-btn.primary-btn .admin-quick-action-icon {
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+}
+
+.admin-quick-action-btn.secondary-btn .admin-quick-action-icon {
+  background: rgba(29, 78, 216, 0.08);
+  color: var(--primary);
+}
+
+.admin-quick-action-badge {
+  margin-left: 8px;
+  display: inline-flex;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 999px;
+  align-items: center;
+  justify-content: center;
+  background: rgba(29, 78, 216, 0.12);
+  color: #1d4ed8;
+  font-size: 0.75rem;
+  font-weight: 800;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* =========================================
+   ADMIN ICON BUTTONS
+   (BooksCatalogue edit / copy controls)
+========================================= */
+.admin-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  backdrop-filter: blur(4px);
+  transition:
+    background-color 0.18s ease,
+    transform 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.admin-btn:hover {
+  background-color: rgba(255, 255, 255, 0.32);
+  transform: scale(1.12);
+}
+
+.admin-btn:active {
+  transform: scale(0.95);
+  opacity: 0.85;
+}
+
+/* Per-button accent tints */
+.admin-btn.edit-btn:hover {
+  background-color: rgba(99, 179, 237, 0.45);
+}
+
+.admin-btn.increase-btn:hover {
+  background-color: rgba(104, 211, 145, 0.45);
+}
+
+.admin-btn.decrease-btn:hover {
+  background-color: rgba(252, 129, 129, 0.45);
+}
+
+.admin-btn svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+/* =========================================
+   TOPBAR WRAPPER + ADMIN QUICK-ACTION STRIP
+   Wraps <header> and the quick-action row so
+   both share the same sticky context.
+========================================= */
+.topbar-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  /* Break out of the centered page-shell container */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+
+.topbar-quick-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  gap: 0.5rem;
+  padding: 0.4rem 1.25rem 0.4rem 0;
+  background-color: transparent;
+  border-bottom: none;
+  box-shadow: none;
+}
+
+.topbar-quick-actions::-webkit-scrollbar {
+  display: none;
+}
+
+.topbar-qa-btn {
+  height: 2.1rem;
+  padding: 0 1.1rem;
+  min-width: max-content;
+  padding: 0 1rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: inherit;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  text-align: center;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background-color: transparent;
+  color: var(--qa-btn-color, rgba(255, 255, 255, 0.82));
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  flex: 0 0 auto;
+}
+
+.topbar-qa-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.topbar-qa-btn:active {
+  background-color: var(--qa-btn-active-bg, rgba(255, 255, 255, 0.2));
+}
+
+.topbar-qa-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.4rem;
+  min-width: 1.2rem;
+  height: 1.2rem;
+  padding: 0 0.3rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+  background-color: var(--qa-badge-bg, #e05252);
+  color: var(--qa-badge-color, #ffffff);
+  vertical-align: middle;
+}
+
+/* =========================================
+   ADMIN-SPECIFIC RESPONSIVE
+========================================= */
+@media (max-width: 1280px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: stretch;
+  }
+}
+
+@media (max-width: 1024px) {
+  .page-shell {
+    width: min(100%, calc(100% - 24px));
+    padding-top: 0;
+    padding-bottom: 32px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 280px));
+    gap: 12px;
+  }
+
+  .admin-quick-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+    max-width: none;
+  }
+
+  .quick-summary-strip {
+    flex-direction: column;
+  }
+
+  .quick-summary-pill,
+  .quick-summary-item {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 768px) {
+  .topbar-quick-actions {
+    padding: 0.5rem 0;
+    gap: 0.45rem;
+  }
+
+  .topbar-qa-btn {
+    min-width: 6rem;
+    font-size: 0.75rem;
+  }
+
+  .admin-quick-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-quick-action-btn {
+    min-height: 64px;
+    padding: 12px 14px;
+    border-radius: 18px;
+    gap: 12px;
+  }
+
+  .admin-quick-action-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    font-size: 1rem;
+  }
+
+  .admin-quick-action-title {
+    font-size: 0.95rem;
+  }
+
+  .admin-quick-action-text {
+    font-size: 0.82rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-shell {
+    width: min(100%, calc(100% - 18px));
+    padding-top: 0;
+    padding-bottom: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar-quick-actions {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0.45rem 0;
+  }
+
+  .topbar-quick-actions::-webkit-scrollbar {
+    display: none;
+  }
+
+  .topbar-qa-btn {
+    flex-shrink: 0;
+    min-width: 5.5rem;
+  }
+
+  .page-shell {
+    width: min(100%, calc(100% - 14px));
+    padding-top: 0;
+    padding-bottom: 18px;
+  }
+
+  .stat-card {
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .stat-icon,
+  .mini-stat-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+  }
+
+  .stat-card h3 {
+    font-size: 1.15rem;
+  }
+
+  .stat-card p {
+    font-size: 0.82rem;
+  }
+}

@@ -1,0 +1,1218 @@
+/* ============================================================
+   WalkInCheckoutModal.css
+   Scoped with wic-* prefix.
+   Import inside WalkInCheckoutModal.jsx.
+
+   Layout chain that makes scrolling work on EVERY screen:
+     .wic-overlay        fixed full-screen flex centering
+       .wic-modal        flex-column, capped by max-height
+         .wic-header     flex-shrink:0  (never compressed)
+         .wic-progress   flex-shrink:0  (never compressed)
+         form#wic-form   flex:1, flex-column, min-height:0
+           .wic-body     flex:1, overflow-y:auto  ← SCROLLS
+           .wic-footer   flex-shrink:0            ← always visible
+============================================================ */
+
+/* =========================================
+   OVERLAY — full-screen fixed backdrop
+========================================= */
+.wic-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+
+  /* Safe-area padding (notch / home bar) */
+  padding-top: env(safe-area-inset-top, 8px);
+  padding-bottom: env(safe-area-inset-bottom, 8px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+
+  /* The overlay itself must NOT scroll — scrolling lives in .wic-body */
+  overflow: hidden;
+
+  animation: wic-fade-in 0.18s ease;
+}
+
+@keyframes wic-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* =========================================
+   MODAL CARD
+   Must be a fixed-height flex column so
+   .wic-body can scroll inside it.
+========================================= */
+.wic-modal {
+  /* Width: fluid between small phones and desktop */
+  width: min(540px, calc(100vw - 32px));
+
+  /* Height cap — the modal never overflows the visible viewport.
+     dvh accounts for mobile browser chrome (address bar, etc.). */
+  max-height: min(72vh, 72dvh);
+  height: min(72vh, 72dvh);
+  /* give it a concrete height so flex children can fill */
+
+  /* Flex column: header → progress → [form → body + footer] */
+  display: flex;
+  flex-direction: column;
+
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.14),
+    0 24px 56px rgba(0, 0, 0, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+
+  /* overflow:hidden keeps border-radius visible on children */
+  overflow: hidden;
+
+  animation: wic-slide-up 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes wic-slide-up {
+  from {
+    transform: translateY(28px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* =========================================
+   FORM — fills the remaining space after
+   header + progress strip, then splits into
+   scrolling body + pinned footer.
+========================================= */
+#wic-form,
+form.wic-form {
+  flex: 1 1 0;
+  /* grow to fill whatever height is left      */
+  min-height: 0;
+  /* CRITICAL: allows flex child to shrink below content size */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* clip — scrolling is handled by .wic-body  */
+}
+
+/* =========================================
+   HEADER — pinned, never shrinks
+========================================= */
+.wic-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 20px 20px 16px;
+  background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.wic-header-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #ffffff;
+}
+
+.wic-header-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.wic-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 2px;
+  letter-spacing: -0.025em;
+  line-height: 1.3;
+}
+
+.wic-subtitle {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.wic-close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  border: none;
+  background: rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.18s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.wic-close-btn:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+/* =========================================
+   PROGRESS STRIP — pinned, never shrinks
+========================================= */
+.wic-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  background: #f8faff;
+  border-bottom: 1px solid #e8eef8;
+  flex-shrink: 0;
+}
+
+.wic-progress-step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wic-progress-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  color: #9ca3af;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.22s ease, color 0.22s ease, transform 0.22s ease;
+}
+
+.wic-progress-step.done .wic-progress-dot {
+  background: #2563eb;
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+.wic-progress-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #9ca3af;
+  letter-spacing: 0.02em;
+  transition: color 0.22s ease;
+}
+
+.wic-progress-step.done .wic-progress-label {
+  color: #2563eb;
+}
+
+.wic-progress-line {
+  width: 40px;
+  height: 2px;
+  background: #e5e7eb;
+  margin: 0 6px;
+  flex-shrink: 0;
+  border-radius: 2px;
+}
+
+/* =========================================
+   BODY — the ONE scrolling container.
+   flex:1 fills the form's remaining height;
+   overflow-y:auto enables scroll.
+========================================= */
+.wic-body {
+  flex: 1 1 auto;
+
+  min-height: 0;
+  min-width: 0;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  padding: 18px 20px 14px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 0;
+
+  position: relative;
+
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Slim scrollbar — visible so users know they can scroll */
+.wic-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.wic-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.wic-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 99px;
+}
+
+.wic-body {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+/* =========================================
+   SECTIONS
+========================================= */
+.wic-section {
+  padding: 16px 0;
+
+  min-height: 0;
+  min-width: 0;
+
+  overflow: visible;
+
+  position: relative;
+  z-index: 1;
+
+  flex-shrink: 0;
+}
+
+.wic-section-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+
+  flex-shrink: 0;
+}
+
+.wic-section-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.wic-section-title {
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 2px;
+  line-height: 1.3;
+}
+
+.wic-section-hint {
+  font-size: 0.78rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.wic-divider {
+  height: 1px;
+  background: #f1f5f9;
+  margin: 0 -20px;
+
+  flex-shrink: 0;
+}
+
+/* =========================================
+   SEARCH FIELD
+========================================= */
+.wic-search-section {
+  position: relative;
+  z-index: 5;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+
+  min-width: 0;
+  width: 100%;
+}
+
+.wic-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1.5px solid #e5e7eb;
+  background: #fafafa;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.wic-search-wrap:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  background: #ffffff;
+}
+
+.wic-search-icon {
+  color: #9ca3af;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.wic-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  color: #111827;
+  background: transparent;
+  min-width: 0;
+  font-family: inherit;
+  /* ≥16px prevents iOS auto-zoom on focus */
+  font-size: 16px;
+}
+
+.wic-search-input::placeholder {
+  color: #9ca3af;
+}
+
+.wic-search-clear {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: #f3f4f6;
+  color: #6b7280;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0;
+  line-height: 1;
+  transition: background 0.18s ease, color 0.18s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.wic-search-clear:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* =========================================
+   RESULTS LIST
+========================================= */
+.wic-results-list {
+  position: relative;
+  z-index: 20;
+
+  width: 100%;
+
+  border-radius: 14px;
+  border: 1.5px solid #e5e7eb;
+
+  background: #ffffff;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  max-height: 220px;
+  min-height: 60px;
+
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.wic-result-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: none;
+  border-bottom: 1px solid #f3f4f6;
+  background: transparent;
+  width: 100%;
+  box-sizing: border-box;
+  /* ensures padding doesn't push row wider than container on mobile */
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.14s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  flex-shrink: 0;
+  /* rows must not compress — the list container scrolls, not the rows */
+}
+
+.wic-result-row:last-child {
+  border-bottom: none;
+}
+
+.wic-result-row:not([disabled]):hover,
+.wic-result-row:not([disabled]):active {
+  background: #f0f7ff;
+}
+
+.wic-result-row--unavailable {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.wic-result-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 1px solid #bfdbfe;
+  color: #2563eb;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: -0.02em;
+}
+
+.wic-result-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.wic-result-primary {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.3;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wic-result-secondary {
+  font-size: 0.75rem;
+  color: #6b7280;
+  line-height: 1.3;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wic-result-unavailable-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #c2410c;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 6px;
+  padding: 1px 6px;
+  display: inline-block;
+  margin-top: 2px;
+  width: fit-content;
+}
+
+.wic-result-chevron,
+.wic-result-lock {
+  color: #d1d5db;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.wic-result-lock {
+  font-size: 0.8rem;
+}
+
+.wic-results-empty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px;
+  font-size: 0.82rem;
+  color: #9ca3af;
+}
+
+.wic-results-empty-icon {
+  color: #d1d5db;
+  display: flex;
+  align-items: center;
+}
+
+.wic-highlight {
+  background: #fef9c3;
+  color: #92400e;
+  font-weight: 800;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+/* =========================================
+   SELECTED CARD
+========================================= */
+.wic-selected-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+
+  border-radius: 12px;
+  border: 1.5px solid #bfdbfe;
+
+  background: linear-gradient(135deg, #eff6ff, #dbeafe 60%, #eff6ff);
+
+  position: relative;
+  z-index: 2;
+
+  min-height: 84px;
+
+  overflow: hidden;
+}
+
+.wic-selected-blue {
+  border-color: #bfdbfe;
+  background: linear-gradient(135deg, #eff6ff, #dbeafe 60%, #eff6ff);
+}
+
+.wic-selected-green {
+  border-color: #bbf7d0;
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7 60%, #f0fdf4);
+}
+
+.wic-selected-red {
+  border-color: #fecaca;
+  background: linear-gradient(135deg, #fff1f2, #ffe4e6 60%, #fff1f2);
+}
+
+.wic-selected-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgba(37, 99, 235, 0.1);
+  color: #2563eb;
+  font-size: 0.78rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: -0.02em;
+}
+
+.wic-selected-green .wic-selected-avatar {
+  background: rgba(22, 163, 74, 0.1);
+  color: #16a34a;
+}
+
+.wic-selected-red .wic-selected-avatar {
+  background: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+}
+
+.wic-selected-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.wic-selected-primary {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.3;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wic-selected-secondary {
+  font-size: 0.75rem;
+  color: #6b7280;
+  line-height: 1.3;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wic-selected-clear {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(0, 0, 0, 0.06);
+  color: #6b7280;
+  font-size: 0.8rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0;
+  line-height: 1;
+  transition: background 0.18s ease, color 0.18s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.wic-selected-clear:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* =========================================
+   DETAILS — Due date + Notes
+========================================= */
+.wic-details-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.wic-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.wic-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #374151;
+}
+
+.wic-label-icon {
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+}
+
+.wic-label-required {
+  color: #ef4444;
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+.wic-label-optional {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #9ca3af;
+}
+
+.wic-input {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1.5px solid #e5e7eb;
+  background: #fafafa;
+  font-size: 16px;
+  /* ≥16px prevents iOS auto-zoom */
+  color: #111827;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.wic-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  background: #ffffff;
+}
+
+.wic-input-error {
+  border-color: #f87171;
+  background: #fff5f5;
+}
+
+.wic-input-error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.wic-input-date {
+  cursor: pointer;
+}
+
+.wic-textarea {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1.5px solid #e5e7eb;
+  background: #fafafa;
+  font-size: 16px;
+  /* ≥16px prevents iOS auto-zoom */
+  color: #111827;
+  outline: none;
+  resize: vertical;
+  min-height: 72px;
+  line-height: 1.5;
+  font-family: inherit;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.wic-textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  background: #ffffff;
+}
+
+.wic-char-count {
+  font-size: 0.72rem;
+  color: #9ca3af;
+  text-align: right;
+  font-weight: 500;
+}
+
+.wic-field-notes {
+  margin-top: 2px;
+}
+
+/* =========================================
+   FIELD / SUBMIT ERRORS
+========================================= */
+.wic-field-error {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #dc2626;
+  margin: 4px 0 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  line-height: 1.4;
+}
+
+.wic-field-error--book-unavailable {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 10px;
+  padding: 8px 12px;
+  color: #b45309;
+  margin-top: 8px;
+}
+
+.wic-field-error--submit {
+  background: #fff5f5;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  padding: 8px 12px;
+  color: #b91c1c;
+  margin-bottom: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* =========================================
+   FOOTER — pinned to bottom, never scrolls
+========================================= */
+.wic-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px 20px;
+  border-top: 1px solid #f1f5f9;
+  background: #fafbff;
+  flex-shrink: 0;
+  /* NEVER compressed — always visible */
+}
+
+.wic-btn-cancel {
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: 1.5px solid #e5e7eb;
+  background: #ffffff;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 44px;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.wic-btn-cancel:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #d1d5db;
+  transform: translateY(-1px);
+}
+
+.wic-btn-cancel:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.wic-btn-submit {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 22px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(29, 78, 216, 0.3);
+  min-height: 44px;
+  transition: opacity 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.wic-btn-submit:hover:not(:disabled) {
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(29, 78, 216, 0.36);
+}
+
+.wic-btn-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.wic-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: wic-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes wic-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================
+   RESPONSIVE — mobile breakpoints
+   These only tighten spacing and sizes.
+   The flex-chain above handles scrolling
+   at ALL screen sizes without changes.
+========================================= */
+
+/* ── ≤ 768px (tablet) ── */
+@media (max-width: 768px) {
+  .wic-modal {
+    max-height: min(70vh, 70dvh);
+    height: min(70vh, 70dvh);
+  }
+}
+
+/* ── ≤ 600px ── */
+@media (max-width: 600px) {
+  .wic-modal {
+    width: calc(100vw - 24px);
+    max-height: min(74vh, 74dvh);
+    height: min(74vh, 74dvh);
+    border-radius: 18px;
+  }
+
+  .wic-header {
+    padding: 16px 16px 14px;
+  }
+
+  .wic-header-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
+
+  .wic-title {
+    font-size: 1rem;
+  }
+
+  .wic-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .wic-progress {
+    padding: 10px 16px;
+  }
+
+  .wic-progress-line {
+    width: 28px;
+  }
+
+  .wic-body {
+    padding: 16px 16px 12px;
+  }
+
+  .wic-divider {
+    margin: 0 -16px;
+  }
+
+  /* Reduce section vertical padding to recover scroll space */
+  .wic-section {
+    padding: 12px 0;
+  }
+
+  .wic-section-head {
+    margin-bottom: 10px;
+  }
+
+  .wic-footer {
+    padding: 12px 16px;
+    gap: 8px;
+  }
+
+  /* Buttons each take half the footer row */
+  .wic-btn-cancel,
+  .wic-btn-submit {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* ── ≤ 480px ── */
+@media (max-width: 480px) {
+  .wic-modal {
+    width: calc(100vw - 20px);
+    max-height: min(78vh, 78dvh);
+    height: min(78vh, 78dvh);
+    border-radius: 16px;
+  }
+
+  .wic-progress-label {
+    font-size: 0.68rem;
+  }
+
+  .wic-progress-dot {
+    width: 22px;
+    height: 22px;
+    font-size: 0.65rem;
+  }
+
+  .wic-progress-line {
+    width: 20px;
+  }
+
+  .wic-section {
+    padding: 10px 0;
+  }
+
+  .wic-section-head {
+    margin-bottom: 8px;
+  }
+
+  .wic-section-title {
+    font-size: 0.82rem;
+  }
+
+  .wic-section-hint {
+    font-size: 0.73rem;
+  }
+
+  /* Shorter results list on small screens so all 3 sections stay reachable */
+  .wic-results-list {
+    max-height: 190px;
+  }
+
+  /* Shrink textarea so it doesn't crowd out the footer */
+  .wic-textarea {
+    min-height: 56px;
+  }
+}
+
+/* ── ≤ 380px ── */
+@media (max-width: 380px) {
+  .wic-modal {
+    width: calc(100vw - 16px);
+    max-height: min(82vh, 82dvh);
+    height: min(82vh, 82dvh);
+    border-radius: 14px;
+  }
+
+  .wic-header {
+    padding: 14px 14px 12px;
+    gap: 10px;
+  }
+
+  .wic-header-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .wic-title {
+    font-size: 0.92rem;
+  }
+
+  .wic-progress {
+    padding: 9px 12px;
+  }
+
+  .wic-progress-line {
+    width: 16px;
+    margin: 0 4px;
+  }
+
+  .wic-body {
+    padding: 12px 14px 8px;
+  }
+
+  .wic-divider {
+    margin: 0 -14px;
+  }
+
+  .wic-section {
+    padding: 9px 0;
+  }
+
+  .wic-results-list {
+    max-height: 170px;
+  }
+
+  .wic-textarea {
+    min-height: 48px;
+  }
+
+  .wic-footer {
+    padding: 8px 14px;
+    gap: 6px;
+  }
+
+  .wic-btn-cancel,
+  .wic-btn-submit {
+    font-size: 0.82rem;
+    padding: 8px 14px;
+    min-height: 38px;
+  }
+}
+
+/* ── ≤ 320px ── */
+@media (max-width: 320px) {
+  .wic-modal {
+    width: calc(100vw - 12px);
+    border-radius: 12px;
+  }
+
+  .wic-title {
+    font-size: 0.85rem;
+  }
+
+  .wic-subtitle {
+    display: none;
+  }
+
+  /* save vertical space */
+
+  /* Dots-only progress bar */
+  .wic-progress-label {
+    display: none;
+  }
+
+  .wic-progress-line {
+    width: 12px;
+    margin: 0 2px;
+  }
+}
+
+/* ── Landscape phone + soft keyboard
+   When keyboard is open the viewport height can halve.
+   dvh keeps the modal visible; we clip header chrome. ── */
+@media (max-height: 500px) and (max-width: 900px) {
+  .wic-modal {
+    max-height: 99dvh;
+    height: 99dvh;
+    border-radius: 10px;
+  }
+
+  .wic-overlay {
+    align-items: flex-start;
+    padding-top: 2px;
+  }
+
+  .wic-header {
+    padding: 10px 14px;
+  }
+
+  .wic-header-icon {
+    display: none;
+  }
+
+  .wic-title {
+    font-size: 0.88rem;
+  }
+
+  .wic-subtitle {
+    display: none;
+  }
+
+  .wic-progress {
+    padding: 7px 14px;
+  }
+
+  .wic-body {
+    padding: 10px 14px 8px;
+  }
+
+  .wic-section {
+    padding: 8px 0;
+  }
+
+  .wic-results-list {
+    max-height: 150px;
+  }
+
+  .wic-textarea {
+    min-height: 44px;
+  }
+
+  .wic-footer {
+    padding: 8px 14px;
+  }
+}
