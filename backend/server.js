@@ -5642,6 +5642,7 @@ async function runAutomatedReminderCycle() {
 /* =========================================
    START SERVER
 ========================================= */
+console.log("MONGO_URI =", MONGO_URI);
 mongoose.connect(MONGO_URI).then(() => {
   app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
