@@ -10,5 +10,4 @@ mongo_backup/
 dist/
 build/
 
-# Optional
 backend/hash.js
