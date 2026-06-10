@@ -5638,22 +5638,20 @@ async function runAutomatedReminderCycle() {
     isReminderCycleRunning = false;
   }
 }
+console.log("Starting server...");
+console.log("PORT =", PORT);
+console.log("MONGO_URI exists =", !!MONGO_URI);
 
-/* =========================================
-   START SERVER
-========================================= */
-console.log("MONGO_URI =", MONGO_URI);
-mongoose.connect(MONGO_URI).then(() => {
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
+mongoose
+  .connect(MONGO_URI)
+  .then(() => {
+    console.log("MongoDB Connected");
 
-    // Run once shortly after startup, then every 15 minutes
-    setTimeout(() => {
-      runAutomatedReminderCycle();
-    }, 30 * 1000); // 30-second grace period for DB warm-up
-
-    setInterval(() => {
-      runAutomatedReminderCycle();
-    }, 15 * 60 * 1000); // every 15 minutes
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("MongoDB Connection Error:");
+    console.error(err);
   });
-});
