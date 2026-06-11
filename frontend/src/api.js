@@ -5,6 +5,8 @@ export const API_BASE =
   import.meta.env.VITE_API_URL?.replace(/\/$/, "") ||
   "http://localhost:4000/api";
 
+console.log("API_BASE =", API_BASE);
+
 export const SERVER_ORIGIN = API_BASE.replace(/\/api$/, "");
 
 /**
