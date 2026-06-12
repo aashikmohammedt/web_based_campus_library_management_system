@@ -249,7 +249,7 @@ export default function NewArrivalsHighlight({ books = [], onReserve, activeRese
               const btnLabel = isBlockedCollected ? "Already Checked Out"
                              : isBlockedReserved  ? "Already Pre-Booked"
                              : available          ? "Pre-Book"
-                             :                      "Join Waitlist";
+                             :                      "Pre-Book";
               return (
                 <div
                   className="na-card na-card--clickable"

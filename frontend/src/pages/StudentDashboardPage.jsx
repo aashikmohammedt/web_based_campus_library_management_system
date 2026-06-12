@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 
-import BooksCatalogue          from "../components/BooksCatalogue";
-import NewArrivalsHighlight    from "../components/NewArrivalsHighlight";
-import ProfileSidebar          from "../components/ProfileSidebar";
-import TopBar                  from "../components/TopBar";
+import BooksCatalogue from "../components/BooksCatalogue";
+import NewArrivalsHighlight from "../components/NewArrivalsHighlight";
+import ProfileSidebar from "../components/ProfileSidebar";
+import TopBar from "../components/TopBar";
 import StudentReservationsPage from "./StudentReservationsPage";  // ← NEW IMPORT
 
 import "./StudentDashboardPage.css";
@@ -15,9 +15,9 @@ import { apiRequest } from "../api";
 ========================================= */
 function EditBookModal({ open, book, onClose, onSave, saving }) {
   const [form, setForm] = useState({
-    title:       "",
-    author:      "",
-    edition:     "",
+    title: "",
+    author: "",
+    edition: "",
     totalCopies: "",
   });
 
@@ -25,9 +25,9 @@ function EditBookModal({ open, book, onClose, onSave, saving }) {
   useEffect(() => {
     if (book) {
       setForm({
-        title:       book.title       ?? "",
-        author:      book.author      ?? "",
-        edition:     book.edition     ?? "",
+        title: book.title ?? "",
+        author: book.author ?? "",
+        edition: book.edition ?? "",
         totalCopies: book.totalCopies ?? "",
       });
     }
@@ -175,31 +175,42 @@ function EditBookModal({ open, book, onClose, onSave, saving }) {
    STUDENT DASHBOARD PAGE
 ========================================= */
 export default function StudentDashboardPage({ user, onUserUpdated, onLogoutClick, setToast }) {
-  const [books,        setBooks]        = useState([]);
+  const [books, setBooks] = useState([]);
   const [loadingBooks, setLoadingBooks] = useState(false);
-  const [showProfile,  setShowProfile]  = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
 
   // ── Student page navigation ──────────────────────────────────────────────
   const [activeStudentPage, setActiveStudentPage] = useState("dashboard");
+  useEffect(() => {
+  const handlePopState = () => {
+    setActiveStudentPage("dashboard");
+  };
+
+  window.addEventListener("popstate", handlePopState);
+
+  return () => {
+    window.removeEventListener("popstate", handlePopState);
+  };
+}, []);
 
   // ── Reservations state ───────────────────────────────────────────────────
   const [reservations, setReservations] = useState([]);
 
   // ── Search state ─────────────────────────────────────────────────────────
   const [searchValue, setSearchValue] = useState("");
-  const [filterType,  setFilterType]  = useState("all");
+  const [filterType, setFilterType] = useState("all");
 
   // ── Section refs for quick-action scrolling ──────────────────────────────
   const newArrivalsRef = useRef(null);
-  const catalogueRef   = useRef(null);
+  const catalogueRef = useRef(null);
 
   // ── Reservation state ────────────────────────────────────────────────────
   const [reserving, setReserving] = useState(false);
 
   // ── Edit state ───────────────────────────────────────────────────────────
-  const [editTarget,    setEditTarget]   = useState(null);
+  const [editTarget, setEditTarget] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [saving,        setSaving]       = useState(false);
+  const [saving, setSaving] = useState(false);
 
   /* ── Load books ──────────────────────────────────────────────────────── */
   const loadBooks = async () => {
@@ -250,13 +261,13 @@ export default function StudentDashboardPage({ user, onUserUpdated, onLogoutClic
           return (b.author ?? "").toLowerCase().includes(q);
         case "new":
           return (
-            (b.title  ?? "").toLowerCase().includes(q) ||
+            (b.title ?? "").toLowerCase().includes(q) ||
             (b.author ?? "").toLowerCase().includes(q)
           );
         default:
           return (
-            (b.title      ?? "").toLowerCase().includes(q) ||
-            (b.author     ?? "").toLowerCase().includes(q) ||
+            (b.title ?? "").toLowerCase().includes(q) ||
+            (b.author ?? "").toLowerCase().includes(q) ||
             (b.department ?? "").toLowerCase().includes(q) ||
             (b.courseCode ?? "").toLowerCase().includes(q)
           );
@@ -341,7 +352,7 @@ export default function StudentDashboardPage({ user, onUserUpdated, onLogoutClic
   const handleIncrease = async (book) => {
     const updated = {
       ...book,
-      totalCopies:     book.totalCopies     + 1,
+      totalCopies: book.totalCopies + 1,
       availableCopies: book.availableCopies + 1,
     };
 
@@ -351,7 +362,7 @@ export default function StudentDashboardPage({ user, onUserUpdated, onLogoutClic
       await apiRequest(`/books/${book._id}`, {
         method: "PUT",
         body: JSON.stringify({
-          totalCopies:     updated.totalCopies,
+          totalCopies: updated.totalCopies,
           availableCopies: updated.availableCopies,
         }),
       });
@@ -364,7 +375,7 @@ export default function StudentDashboardPage({ user, onUserUpdated, onLogoutClic
   const handleDecrease = async (book) => {
     const updated = {
       ...book,
-      totalCopies:     Math.max(0, book.totalCopies     - 1),
+      totalCopies: Math.max(0, book.totalCopies - 1),
       availableCopies: Math.max(0, book.availableCopies - 1),
     };
 
@@ -374,7 +385,7 @@ export default function StudentDashboardPage({ user, onUserUpdated, onLogoutClic
       await apiRequest(`/books/${book._id}`, {
         method: "PUT",
         body: JSON.stringify({
-          totalCopies:     updated.totalCopies,
+          totalCopies: updated.totalCopies,
           availableCopies: updated.availableCopies,
         }),
       });
@@ -401,7 +412,14 @@ export default function StudentDashboardPage({ user, onUserUpdated, onLogoutClic
     {
       // ── FIXED: was setShowProfile(true), now navigates to reservations page ──
       label: "My Pre-Bookings and Checkouts",
-      onClick: () => setActiveStudentPage("reservations"),
+      onClick: () => {
+        window.history.pushState(
+          { page: "reservations" },
+          "",
+          "#reservations"
+        );
+        setActiveStudentPage("reservations");
+      },
     },
   ];
 
