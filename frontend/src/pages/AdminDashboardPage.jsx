@@ -29,7 +29,22 @@ export default function AdminDashboardPage({ user, onUserUpdated, onLogoutClick,
   const [walkInAutoOpen, setWalkInAutoOpen] = useState(false);
   const [showAdminReportsPage, setShowAdminReportsPage] = useState(false);
   const [showStudentDetailsPage, setShowStudentDetailsPage] = useState(false);
+  useEffect(() => {
+    const handlePopState = () => {
+      setShowProfile(false);
+      setShowStudentDetailsPage(false);
+      setShowAdminReservationsPage(false);
+      setShowWalkInPage(false);
+      setShowAdminReportsPage(false);
+      setWalkInAutoOpen(false);
+    };
 
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
   const addBookRef = useRef(null);
   const catalogueRef = useRef(null);
 
@@ -462,7 +477,15 @@ export default function AdminDashboardPage({ user, onUserUpdated, onLogoutClick,
         subtitle="Manage inventory, pre-bookings, due dates, and student activity."
         reservationButtonText="Pre-Booking Management"
         onReservationsClick={() => setShowAdminReservationsPage(true)}
-        onProfileClick={() => setShowProfile(true)}
+        onProfileClick={() => {
+          window.history.pushState(
+            { page: "profile" },
+            "",
+            "#profile"
+          );
+
+          setShowProfile(true);
+        }}
         user={user}
         onProfileUpdated={onUserUpdated}
         setToast={setToast}
@@ -481,25 +504,59 @@ export default function AdminDashboardPage({ user, onUserUpdated, onLogoutClick,
           },
           {
             label: "Pre-Bookings and Checkouts",
-            onClick: () => setShowAdminReservationsPage(true),
+            onClick: () => {
+              window.history.pushState(
+                { page: "reservations" },
+                "",
+                "#reservations"
+              );
+              setShowAdminReservationsPage(true);
+            },
           },
           {
             label: "Students",
-            onClick: () => setShowStudentDetailsPage(true),
+            onClick: () => {
+              window.history.pushState(
+                { page: "students" },
+                "",
+                "#students"
+              );
+              setShowStudentDetailsPage(true);
+            },
           },
           {
             label: "Reports",
-            onClick: () => setShowAdminReportsPage(true),
+            onClick: () => {
+              window.history.pushState(
+                { page: "reports" },
+                "",
+                "#reports"
+              );
+              setShowAdminReportsPage(true);
+            },
           },
           {
             label: "Walk-In Checkouts",
             // Opens WalkInPage in list view (no form)
-            onClick: () => setShowWalkInPage(true),
+            onClick: () => {
+              window.history.pushState(
+                { page: "walkin" },
+                "",
+                "#walkin"
+              );
+              setShowWalkInPage(true);
+            },
           },
           {
             label: "New Walk-In",
             // FIX: sets walkInAutoOpen=true so WalkInPage opens its form on mount
             onClick: () => {
+              window.history.pushState(
+                { page: "new-walkin" },
+                "",
+                "#new-walkin"
+              );
+
               setWalkInAutoOpen(true);
               setShowWalkInPage(true);
             },

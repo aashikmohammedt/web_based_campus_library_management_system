@@ -182,16 +182,28 @@ export default function StudentDashboardPage({ user, onUserUpdated, onLogoutClic
   // ── Student page navigation ──────────────────────────────────────────────
   const [activeStudentPage, setActiveStudentPage] = useState("dashboard");
   useEffect(() => {
-  const handlePopState = () => {
-    setActiveStudentPage("dashboard");
-  };
+    const handlePopState = () => {
+      setActiveStudentPage("dashboard");
+      setShowProfile(false);
+    };
 
-  window.addEventListener("popstate", handlePopState);
+    window.addEventListener("popstate", handlePopState);
 
-  return () => {
-    window.removeEventListener("popstate", handlePopState);
-  };
-}, []);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
+  useEffect(() => {
+    const handlePopState = () => {
+      setActiveStudentPage("dashboard");
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
 
   // ── Reservations state ───────────────────────────────────────────────────
   const [reservations, setReservations] = useState([]);
@@ -444,7 +456,15 @@ export default function StudentDashboardPage({ user, onUserUpdated, onLogoutClic
       <TopBar
         title="Student Dashboard"
         subtitle="Browse and reserve books from the library catalogue."
-        onProfileClick={() => setShowProfile(true)}
+        onProfileClick={() => {
+          window.history.pushState(
+            { page: "profile" },
+            "",
+            "#profile"
+          );
+
+          setShowProfile(true);
+        }}
         user={user}
         onProfileUpdated={onUserUpdated}
         setToast={setToast}
