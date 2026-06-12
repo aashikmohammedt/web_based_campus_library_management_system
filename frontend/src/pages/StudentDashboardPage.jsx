@@ -304,24 +304,30 @@ export default function StudentDashboardPage({ user, onUserUpdated, onLogoutClic
   /* ── Reserve / Borrow handler ────────────────────────────────────────── */
   const handleReserve = async (book) => {
     if (!book || reserving) return;
+
     setReserving(true);
+
     try {
       const data = await apiRequest("/reservations", {
         method: "POST",
         body: JSON.stringify({ bookId: book._id }),
       });
+
       setToast({
         type: "success",
         message: data.message || "Reservation placed successfully",
       });
-      await loadBooks();
+
+      loadBooks(); // remove await
     } catch (err) {
-      setToast({ type: "error", message: err.message || "Failed to place reservation" });
+      setToast({
+        type: "error",
+        message: err.message || "Failed to place reservation",
+      });
     } finally {
       setReserving(false);
     }
   };
-
   /* ── Edit handlers ───────────────────────────────────────────────────── */
   const handleEdit = (book) => {
     if (!book) return;
