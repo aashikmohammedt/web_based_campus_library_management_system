@@ -1,30 +1,21 @@
 /**
  * mailer.js — Reusable email helper for Library Management System
- * Uses Nodemailer with environment variables for configuration.
+ * Uses Resend HTTP API (no SMTP — works on Render free tier).
  * Safe to import even if email config is missing (will not crash the app).
  */
 
-const nodemailer = require("nodemailer");
+const https = require("https");
 
-// ─── Transporter Setup ───────────────────────────────────────────────────────
+// ─── Resend Setup ─────────────────────────────────────────────────────────────
 
-let transporter = null;
+const RESEND_API_KEY = process.env.RESEND_API_KEY || null;
+const EMAIL_FROM     = process.env.EMAIL_FROM || "onboarding@resend.dev";
 
-if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-  transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-    connectionTimeout: 5000,   // give up connecting after 5 s (ENETUNREACH fails fast)
-    greetingTimeout: 5000,     // give up waiting for SMTP greeting after 5 s
-    socketTimeout: 10000,      // give up on an idle socket after 10 s
-  });
-  console.log("[Mailer] Nodemailer transporter initialised.");
+if (RESEND_API_KEY) {
+  console.log("[Mailer] Resend transporter initialised.");
 } else {
   console.warn(
-    "[Mailer] WARNING: EMAIL_USER or EMAIL_PASS not set. " +
+    "[Mailer] WARNING: RESEND_API_KEY not set. " +
       "All email functions will be skipped silently."
   );
 }
@@ -34,26 +25,49 @@ if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
 async function sendMail(to, subject, html) {
   console.log("[MAIL DEBUG]", {
     to,
-    hasTransporter: !!transporter,
-    emailUser: process.env.EMAIL_USER,
-    hasEmailPass: !!process.env.EMAIL_PASS,
+    hasApiKey: !!RESEND_API_KEY,
+    from: EMAIL_FROM,
   });
 
-  if (!transporter) {
-    console.warn(`[Mailer] Skipped email to ${to} — transporter not configured.`);
+  if (!RESEND_API_KEY) {
+    console.warn(`[Mailer] Skipped email to ${to} — RESEND_API_KEY not configured.`);
     return false;
   }
 
+  const body = JSON.stringify({ from: EMAIL_FROM, to, subject, html });
+
   try {
-    const info = await transporter.sendMail({
-      from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
-      to,
-      subject,
-      html,
+    const statusCode = await new Promise((resolve, reject) => {
+      const req = https.request(
+        {
+          hostname: "api.resend.com",
+          path: "/emails",
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${RESEND_API_KEY}`,
+            "Content-Type": "application/json",
+            "Content-Length": Buffer.byteLength(body),
+          },
+        },
+        (res) => {
+          let raw = "";
+          res.on("data", (chunk) => { raw += chunk; });
+          res.on("end", () => {
+            if (res.statusCode >= 200 && res.statusCode < 300) {
+              resolve(res.statusCode);
+            } else {
+              reject(new Error(`Resend API error ${res.statusCode}: ${raw}`));
+            }
+          });
+        }
+      );
+      req.on("error", reject);
+      req.write(body);
+      req.end();
     });
 
     console.log(
-      `[Mailer] Email sent → ${to} | Subject: "${subject}" | ID: ${info.messageId}`
+      `[Mailer] Email sent → ${to} | Subject: "${subject}" | Status: ${statusCode}`
     );
     return true;
   } catch (err) {
