@@ -1076,16 +1076,24 @@
   }
 
   .wicp-header-left  { align-items: flex-start; }
-  .wicp-back-btn     { margin-bottom: 8px !important; }
-  .wicp-header-actions { justify-content: flex-start; }
 
-  .primary-btn,
-  .secondary-btn {
+  /* Back button — fixed width, always top-left, never stretches */
+  .wicp-back-btn {
+    margin-bottom: 8px !important;
+    width: auto !important;
+    align-self: flex-start;
+  }
+
+  /* Walk-In Checkout button — auto width, centered */
+  .wicp-header-actions {
     width: 100%;
     justify-content: center;
   }
 
-  .wicp-header-actions { width: 100%; }
+  .wicp-header-actions .primary-btn {
+    width: auto;
+    justify-content: center;
+  }
 }
 
 /* 420px — 2-col stats */
