@@ -17,6 +17,9 @@ if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
     },
+    connectionTimeout: 5000,   // give up connecting after 5 s (ENETUNREACH fails fast)
+    greetingTimeout: 5000,     // give up waiting for SMTP greeting after 5 s
+    socketTimeout: 10000,      // give up on an idle socket after 10 s
   });
   console.log("[Mailer] Nodemailer transporter initialised.");
 } else {
