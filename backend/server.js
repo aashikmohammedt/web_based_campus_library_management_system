@@ -2075,34 +2075,39 @@ app.post("/api/reservations", authMiddleware, async (req, res) => {
 
     await decrementAvailableCopiesSafely(book._id);
 
-    // ── Send immediate pre-book confirmation email ─────────────────────────
-    // Populate user so buildMailerPayload() gets a real object, not a bare ID.
-    // Wrapped in try/catch so a mail failure never breaks the reservation response.
-    try {
-      const populatedUser = await User.findById(req.user.userId).lean();
-      const mailerPayload = buildMailerPayload({
-        user: populatedUser,
-        book,                              // already a full Mongoose doc from above
-        reservedAt: reservation.reservedAt,
-        createdAt: reservation.createdAt,
-        dueDate: reservation.dueDate,
-        status: reservation.status,
-      });
-      await sendPrebookConfirmationEmail(mailerPayload);
-      await Reservation.findByIdAndUpdate(reservation._id, {
-        $set: { prebookConfirmationSent: true },
-      });
-      reservation.prebookConfirmationSent = true;
-    } catch (err) {
-      console.error("[PREBOOK] immediate confirmation email failed:", err);
-    }
-    // ──────────────────────────────────────────────────────────────────────
-
-    return res.status(201).json({
+    // ── Respond immediately — do not block on email ────────────────────────
+    res.status(201).json({
       message: "Book reserved successfully",
       reservation: serializeReservation(reservation),
       remainingCopies: book.availableCopies,
     });
+
+    // ── Send immediate pre-book confirmation email (fire-and-forget) ───────
+    // Runs after the response is sent. A mail failure never affects the
+    // reservation response, the frontend modal, or the success toast.
+    User.findById(req.user.userId)
+      .lean()
+      .then((populatedUser) => {
+        const mailerPayload = buildMailerPayload({
+          user: populatedUser,
+          book,
+          reservedAt: reservation.reservedAt,
+          createdAt: reservation.createdAt,
+          dueDate: reservation.dueDate,
+          status: reservation.status,
+        });
+        return sendPrebookConfirmationEmail(mailerPayload).then((sent) => {
+          if (sent) {
+            return Reservation.findByIdAndUpdate(reservation._id, {
+              $set: { prebookConfirmationSent: true },
+            });
+          }
+        });
+      })
+      .catch((err) => {
+        console.error("[PREBOOK] immediate confirmation email failed:", err.message || err);
+      });
+    // ──────────────────────────────────────────────────────────────────────
   } catch (err) {
     console.error("Create reservation error:", err);
     return res.status(500).json({ message: "Failed to reserve book" });
