@@ -303,6 +303,7 @@ export default function StudentDashboardPage({ user, onUserUpdated, onLogoutClic
 
   /* ── Reserve / Borrow handler ────────────────────────────────────────── */
   const handleReserve = async (book) => {
+    console.log("RESERVE BOOK:", book);
     if (!book || reserving) return;
 
     setReserving(true);
@@ -320,6 +321,8 @@ export default function StudentDashboardPage({ user, onUserUpdated, onLogoutClic
 
       loadBooks(); // remove await
     } catch (err) {
+      console.error("RESERVATION ERROR:", err);
+
       setToast({
         type: "error",
         message: err.message || "Failed to place reservation",
