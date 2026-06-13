@@ -302,35 +302,46 @@ export default function StudentDashboardPage({ user, onUserUpdated, onLogoutClic
   };
 
   /* ── Reserve / Borrow handler ────────────────────────────────────────── */
-  const handleReserve = async (book) => {
-    console.log("RESERVE BOOK:", book);
-    if (!book || reserving) return;
+const handleReserve = async (book) => {
+  console.log("STEP 1 - handleReserve started", book);
 
-    setReserving(true);
+  if (!book || reserving) return;
 
-    try {
-      const data = await apiRequest("/reservations", {
-        method: "POST",
-        body: JSON.stringify({ bookId: book._id }),
-      });
+  setReserving(true);
 
-      setToast({
-        type: "success",
-        message: data.message || "Reservation placed successfully",
-      });
+  try {
+    console.log("STEP 2 - calling reservation API");
 
-      loadBooks(); // remove await
-    } catch (err) {
-      console.error("RESERVATION ERROR:", err);
+    const data = await apiRequest("/reservations", {
+      method: "POST",
+      body: JSON.stringify({ bookId: book._id }),
+    });
 
-      setToast({
-        type: "error",
-        message: err.message || "Failed to place reservation",
-      });
-    } finally {
-      setReserving(false);
-    }
-  };
+    console.log("STEP 3 - reservation API success", data);
+
+    setToast({
+      type: "success",
+      message: data.message || "Reservation placed successfully",
+    });
+
+    console.log("STEP 4 - before loadBooks");
+
+    await loadBooks();
+
+    console.log("STEP 5 - loadBooks finished");
+  } catch (err) {
+    console.error("STEP ERROR:", err);
+
+    setToast({
+      type: "error",
+      message: err.message || "Failed to place reservation",
+    });
+  } finally {
+    console.log("STEP 6 - finally reached");
+
+    setReserving(false);
+  }
+};
   /* ── Edit handlers ───────────────────────────────────────────────────── */
   const handleEdit = (book) => {
     if (!book) return;
